@@ -101,7 +101,6 @@ function Dashboard() {
 
 // one API call
 useEffect(() => {
-  console.log("in dashboard")
   if (!isLoggedIn) {
     navigate("/login");
     return;
@@ -115,7 +114,6 @@ useEffect(() => {
       setStudents(data.students || []);
       setCourses(data.courses || []);
       setClassStats(data.stats || []);
-      console.log("Dashboard data loaded:", data);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
       setError("Our server is currently down. please try again later.")

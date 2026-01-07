@@ -164,6 +164,7 @@ function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center p-4">
+      <div className=" absolute">sjcbk</div>
       <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-8 relative overflow-hidden">
         {/* Logo */}
         <div className="flex justify-center mb-6">

@@ -55,14 +55,13 @@ const Result = () => {
 
 
   let searchTimeout;
+//  search  (Debounce method to avoid unnecessary API hitting)
 
-
-//  search
 const handleSearch = (search) => {
-  // Clear any previous timer if the user is still typing
+  // Clear previous timer if user is still typing
   clearTimeout(searchTimeout);
 
-  // Start a new timer — only runs if user stops typing for 500ms
+  // Start a new timer only runs if user stops typing for 500ms
   searchTimeout = setTimeout(async () => {
     if (!search.trim()) {
       // if input is empty, reload all results
@@ -77,7 +76,7 @@ const handleSearch = (search) => {
     } catch (err) {
       console.error("Error fetching search results:", err);
     }
-  }, 1000); // <-- debounce delay in ms (you can adjust this)
+  }, 1000);
 };
 
 
