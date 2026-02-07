@@ -28,7 +28,6 @@ function Login() {
    // Listen for login events (this will trigger when ANY user logs in)
   useEffect(() => {
     socket.on("userLoggedIn", (data) => {
-      console.log("⚡ Server says:", data);
       alert(data.message+ data.user.role);
     });
 
