@@ -15,6 +15,11 @@ const limiter = require("./middleware/rateLimiter")
 const app = express();
 
 dotenv.config();
+if (process.env.NODE_ENV !== 'production') {
+  console.log("⚠️  Running in development mode");
+}
+
+
 console.log("🌍 Environment Mode:", process.env.NODE_ENV);
 
 app.use(cors({
@@ -63,10 +68,6 @@ app.use((_, res, next) => {
     res.header("Access-Control-Expose-Headers", "Authorization");
     next();
   });
-  
-mongoose.connect(process.env.MONGO_URI)
-.then(()=> console.log('MongoDB connected'))
-.catch(err=> console.error(err));
 
 
 app.get('/health/check', (req,res,next) =>{
@@ -78,14 +79,6 @@ app.get('/health/check', (req,res,next) =>{
   })
 })
 
-app.get('/', (req,res,next) =>{
-  return res.json({
-    success: 1,
-    message: 'Yes i am running!',
-    response: 200,
-    data:{}
-  })
-})
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use("/api/admin", require("./routes/adminRoutes")); 
@@ -117,7 +110,17 @@ app.use((err, req, res, next) => {
 // })
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, ()=> console.log(`🚀 Server running on port ${process.env.PORT || 5000}`));
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log("Environment:", process.env.NODE_ENV || "development");
+});
+
+
+  // Connect after server starts (non-blocking)
+mongoose.connect(process.env.MONGO_URI)
+.then(()=> console.log('MongoDB connected'))
+.catch(err=> console.error(err));
 
 
 
