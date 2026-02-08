@@ -22,21 +22,20 @@ if (process.env.NODE_ENV !== 'production') {
 
 console.log("🌍 Environment Mode:", process.env.NODE_ENV);
 
-app.use(cors({
+const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "https://lixschool.vercel.app/",
+    "https://lixschool.vercel.app",
     "https://www.lixschool.vercel.app"
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'X-Requested-With'
-  ],
-  exposedHeaders: ['Authorization'],
-}));
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  exposedHeaders: ["Authorization"]
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // creating http server and attaching socket.io
 const server = http.createServer(app);
