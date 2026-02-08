@@ -1,5 +1,5 @@
 
-const API_URL = "http://localhost:5000/api/results";
+const API_URL = "https://schoolserver.up.railway.app/api/results";
 
 
 
@@ -42,7 +42,7 @@ export const deleteResult = async(token,id)=>{
 
 
 export const loadData = async(token)=> {
-    const res = await fetch("http://localhost:5000/api/results/load-data", {
+    const res = await fetch("https://schoolserver.up.railway.app/api/results/load-data", {
         method: "GET",
         headers: {
             "Content-Type" : "application/json",

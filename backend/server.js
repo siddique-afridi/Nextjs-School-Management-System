@@ -18,7 +18,7 @@ dotenv.config();
 console.log("🌍 Environment Mode:", process.env.NODE_ENV);
 
 app.use(cors({
-  origin:[ "http://localhost:5173", "https://admin-portal-green-zeta.vercel.app", "https://www.admin-portal-green-zeta.vercel.app"],  // frontend URL
+  origin:[ "http://localhost:5173", "https://lixschool.vercel.app", "https://www.lixschool.vercel.app"],  // frontend URL
   credentials: true,
   exposedHeaders: ["Authorization"], // allow frontend to read it
 }));
@@ -26,7 +26,7 @@ app.use(cors({
 // creating http server and attaching socket.io
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
+  cors: { origin:[ "http://localhost:5173", "https://lixschool.vercel.app"], methods: ["GET", "POST"] },
 })
 
 // Storing the io instance globally so routes can use it

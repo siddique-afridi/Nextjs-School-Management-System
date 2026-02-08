@@ -1,5 +1,5 @@
 
-const API_URL =  "http://localhost:5000/api/teachers"; 
+const API_URL =  "https://schoolserver.up.railway.app/api/teachers"; 
 
 export const createTeacher = async(teacherData,token) => {
     const res = await fetch(API_URL,{

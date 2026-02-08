@@ -1,7 +1,7 @@
 
 
 export const fetchResultsData = async (token) => {
-    const res = await fetch("http://localhost:5000/api/result-data",{
+    const res = await fetch("https://schoolserver.up.railway.app/api/result-data",{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
