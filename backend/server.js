@@ -25,7 +25,7 @@ console.log("🌍 Environment Mode:", process.env.NODE_ENV);
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://lixschool.vercel.app",
+    "https://lixschool.vercel.app/",
     "https://www.lixschool.vercel.app"
   ],
   credentials: true,
