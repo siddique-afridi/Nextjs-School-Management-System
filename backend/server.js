@@ -22,6 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 console.log("🌍 Environment Mode:", process.env.NODE_ENV);
 
+// cors
 const corsOptions = {
   origin: [
     "http://localhost:5173",
@@ -35,7 +36,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("/*", cors(corsOptions));
 
 // creating http server and attaching socket.io
 const server = http.createServer(app);
