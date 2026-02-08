@@ -23,9 +23,19 @@ if (process.env.NODE_ENV !== 'production') {
 console.log("🌍 Environment Mode:", process.env.NODE_ENV);
 
 app.use(cors({
-  origin:[ "http://localhost:5173", "https://lixschool.vercel.app", "https://www.lixschool.vercel.app"],  // frontend URL
+  origin: [
+    "http://localhost:5173",
+    "https://lixschool.vercel.app",
+    "https://www.lixschool.vercel.app"
+  ],
   credentials: true,
-  exposedHeaders: ["Authorization"], // allow frontend to read it
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With'
+  ],
+  exposedHeaders: ['Authorization'],
 }));
 
 // creating http server and attaching socket.io
