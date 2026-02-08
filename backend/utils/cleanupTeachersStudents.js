@@ -4,7 +4,7 @@ const User = require("../models/User");     // adjust path if needed
 const Student = require('../models/Students')
 
 // connect to your database
-mongoose.connect("mongodb://localhost:27017/authdb")
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to DB"))
   .catch((err) => console.log("DB error", err));
 

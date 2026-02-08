@@ -525,7 +525,7 @@ function Students() {
             {selectedStudent.profileImage && (
               <div className="flex justify-center mb-4">
                 <img
-                  src={`http://localhost:5000/uploads/${selectedStudent.profileImage}`}
+                  src={`https://schoolserver.up.railway.app/uploads/${selectedStudent.profileImage}`}
                   alt={selectedStudent.name}
                   className="w-24 h-24 rounded-full border"
                 />
@@ -534,7 +534,7 @@ function Students() {
 
             {/* Upload Profile Image */}
             <ProfileImageUpload
-              uploadUrl="http://localhost:5000/api/students/upload-profile"
+              uploadUrl="https://schoolserver.up.railway.app/api/students/upload-profile"
               entityId={selectedStudent._id}
               onUploadSuccess={(data) => {
                 // Update student state with new profile image

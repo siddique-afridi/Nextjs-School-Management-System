@@ -15,7 +15,7 @@ How can I help you today?`,
     },
     user_response: {
       message: async (params) => {
-        const res = await fetch("http://localhost:5000/api/chatbot/chat", {
+        const res = await fetch("https://schoolserver.up.railway.app/api/chatbot/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: params.userInput }),

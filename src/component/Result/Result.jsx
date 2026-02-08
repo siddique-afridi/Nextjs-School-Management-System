@@ -70,7 +70,7 @@ const handleSearch = (search) => {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/results?search=${search}`);
+      const res = await fetch(`https://schoolserver.up.railway.app/api/results?search=${search}`);
       const data = await res.json();
       setResult(data);
     } catch (err) {
@@ -152,7 +152,7 @@ const handleSearch = (search) => {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/results/upload-excel",
+        "https://schoolserver.up.railway.app/api/results/upload-excel",
         {
           method: "POST",
           headers: {

@@ -45,7 +45,7 @@ const StudentMap = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `http://localhost:5000/api/students/nearbyCity?city=${city}`
+          `https://schoolserver.up.railway.app/api/students/nearbyCity?city=${city}`
         );
         const data = await res.json();
         setStudents(data.students);
