@@ -29,14 +29,14 @@ const corsOptions = {
     "https://lixschool.vercel.app",
     "https://www.lixschool.vercel.app"
   ],
-  credentials: true,
+  credentials: false,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   exposedHeaders: ["Authorization"]
 };
 
 app.use(cors(corsOptions));
-app.options("/*", cors(corsOptions));
+
 
 // creating http server and attaching socket.io
 const server = http.createServer(app);
