@@ -9,6 +9,7 @@ import { getTeachers } from "../api/teacherApi";
 import { getAllCourses } from "../api/coursesApi";
 import StudentMap from "./Map/StudentMap";
 import ErrorHandler from "./ErrorHandler";
+import { API_BASE_URL } from "../utils/api";
 
 const cities = [
   "Lahore",
@@ -525,7 +526,7 @@ function Students() {
             {selectedStudent.profileImage && (
               <div className="flex justify-center mb-4">
                 <img
-                  src={`https://schoolserver.up.railway.app/uploads/${selectedStudent.profileImage}`}
+                  src={`${API_BASE_URL}/uploads/${selectedStudent.profileImage}`}
                   alt={selectedStudent.name}
                   className="w-24 h-24 rounded-full border"
                 />
@@ -534,7 +535,7 @@ function Students() {
 
             {/* Upload Profile Image */}
             <ProfileImageUpload
-              uploadUrl="https://schoolserver.up.railway.app/api/students/upload-profile"
+              uploadUrl={`${API_BASE_URL}/api/students/upload-profile`}
               entityId={selectedStudent._id}
               onUploadSuccess={(data) => {
                 // Update student state with new profile image

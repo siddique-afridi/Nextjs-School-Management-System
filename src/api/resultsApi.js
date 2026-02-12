@@ -1,5 +1,6 @@
+import { API_BASE_URL } from "../utils/api";
 
-const API_URL = "https://schoolserver.up.railway.app/api/results";
+const API_URL = `${API_BASE_URL}/api/results`;
 
 
 
@@ -42,7 +43,7 @@ export const deleteResult = async(token,id)=>{
 
 
 export const loadData = async(token)=> {
-    const res = await fetch("https://schoolserver.up.railway.app/api/results/load-data", {
+    const res = await fetch(`${API_BASE_URL}/api/results/load-data`, {
         method: "GET",
         headers: {
             "Content-Type" : "application/json",

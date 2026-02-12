@@ -1,7 +1,10 @@
+import { API_BASE_URL } from "../utils/api";
+
+
 export const getDashboardData = async () => {
     const token = localStorage.getItem("token");
   
-    const res = await fetch("https://schoolserver.up.railway.app/api/dashboard-stats", {
+    const res = await fetch(`${API_BASE_URL}/api/dashboard-stats`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

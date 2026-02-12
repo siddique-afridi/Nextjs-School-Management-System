@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import { API_BASE_URL } from "../utils/api";
 
 // Optional: fix missing marker icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
@@ -45,7 +46,7 @@ const StudentMap = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `https://schoolserver.up.railway.app/api/students/nearbyCity?city=${city}`
+          `${API_BASE_URL}/api/students/nearbyCity?city=${city}`
         );
         const data = await res.json();
         setStudents(data.students);

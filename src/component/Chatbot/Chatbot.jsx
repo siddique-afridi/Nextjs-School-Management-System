@@ -1,4 +1,5 @@
 import ChatBot from "react-chatbotify";
+import { API_BASE_URL } from "../utils/api";
 
 export default function Chatbot() {
   const flow = {
@@ -15,7 +16,7 @@ How can I help you today?`,
     },
     user_response: {
       message: async (params) => {
-        const res = await fetch("https://schoolserver.up.railway.app/api/chatbot/chat", {
+        const res = await fetch(`${API_BASE_URL}/api/chatbot/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: params.userInput }),

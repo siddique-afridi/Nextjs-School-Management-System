@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "../utils/api";
 
-const API_URL = "https://schoolserver.up.railway.app/api/courses";
+const API_URL = `${API_BASE_URL}/api/courses`;
 
 export const createCourse = async (courseData, token) => {
   const res = await axios.post(API_URL, courseData, {

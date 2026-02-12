@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import Table from "../Table";
 import { fetchResultsData } from "../../api/result-data";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from "../utils/api";
 
 // setted up data for sending to backend
 // 1 loadData through api like teachers, students and courses
@@ -70,7 +71,7 @@ const handleSearch = (search) => {
     }
 
     try {
-      const res = await fetch(`https://schoolserver.up.railway.app/api/results?search=${search}`);
+      const res = await fetch(`${API_BASE_URL}/api/results?search=${search}`);
       const data = await res.json();
       setResult(data);
     } catch (err) {
@@ -152,7 +153,7 @@ const handleSearch = (search) => {
 
     try {
       const res = await fetch(
-        "https://schoolserver.up.railway.app/api/results/upload-excel",
+        `${API_BASE_URL}/api/results/upload-excel`,
         {
           method: "POST",
           headers: {

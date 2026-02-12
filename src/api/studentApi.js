@@ -1,11 +1,13 @@
-const API_URL = "https://schoolserver.up.railway.app/api/students"; 
+import { API_BASE_URL } from "../utils/api";
+
+const API_URL = `${API_BASE_URL}/api/students`; 
 
 
 // src/api/studentApi.js
 export async function getStudents(filters = {}) {
   const token = localStorage.getItem("token");
   const params = new URLSearchParams(filters); // converts {search: "Ali"} → search=Ali
-  const res = await fetch(`https://schoolserver.up.railway.app/api/students?${params.toString()}`,{
+  const res = await fetch(`${API_BASE_URL}/api/students?${params.toString()}`,{
     headers: {
       Authorization: `Bearer ${token}`, // ✅ attach token
       "Content-Type": "application/json",

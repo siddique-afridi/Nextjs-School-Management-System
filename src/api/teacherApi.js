@@ -1,5 +1,6 @@
+import { API_BASE_URL } from "../utils/api";
 
-const API_URL =  "https://schoolserver.up.railway.app/api/teachers"; 
+const API_URL =  `${API_BASE_URL}/api/teachers`; 
 
 export const createTeacher = async(teacherData,token) => {
     const res = await fetch(API_URL,{
