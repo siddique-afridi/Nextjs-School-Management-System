@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import Table from "../Table";
 import { fetchResultsData } from "../../api/result-data";
 import { toast } from "react-toastify";
-import { API_BASE_URL } from "../utils/api";
+import { API_BASE_URL } from '../../utils/api';
 
 // setted up data for sending to backend
 // 1 loadData through api like teachers, students and courses

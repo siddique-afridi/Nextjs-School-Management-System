@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-import { API_BASE_URL } from "../utils/api";
+import { API_BASE_URL } from "../../utils/api";
 
 // Optional: fix missing marker icon issue
 // delete L.Icon.Default.prototype._getIconUrl;

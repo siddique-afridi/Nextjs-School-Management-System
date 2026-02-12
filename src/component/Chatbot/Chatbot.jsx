@@ -1,5 +1,5 @@
 import ChatBot from "react-chatbotify";
-import { API_BASE_URL } from "../utils/api";
+import { API_BASE_URL } from "../../utils/api";
 
 export default function Chatbot() {
   const flow = {
