@@ -24,11 +24,12 @@ console.log("🌍 Environment Mode:", process.env.NODE_ENV);
 
 // cors
 const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "https://lixschool.vercel.app",
-    "https://www.lixschool.vercel.app"
-  ],
+  origin: "*",
+  // [
+  //   "http://localhost:5173",
+  //   "https://lixschool.vercel.app",
+  //   "https://www.lixschool.vercel.app"
+  // ],
   credentials: false,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -88,6 +89,10 @@ app.get('/health/check', (req,res,next) =>{
     data:{}
   })
 })
+app.get("/", (req, res) => {
+  res.send("Backend is running");
+});
+
 
 
 app.use('/api/auth', require('./routes/authRoutes'));
