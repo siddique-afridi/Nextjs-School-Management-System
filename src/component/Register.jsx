@@ -12,7 +12,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log("ENV URL:", import.meta.env.VITE_API_URL);
 
     // here the form is submitted to backend and database through register api
     try {
