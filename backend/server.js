@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require ('mongoose');
 const dotenv = require ('dotenv');
 const cors = require ('cors');
-const http = require('http');
-const {Server} = require('socket.io');
+// const http = require('http');
+// const {Server} = require('socket.io');
 const apiLogger = require('./middleware/apiLogger');
 const uploadProfile = require('./controllers/uploadProfile');
 const passport = require('passport')
@@ -40,22 +40,22 @@ app.use(cors(corsOptions));
 
 
 // creating http server and attaching socket.io
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: { origin:[ "http://localhost:5173", "https://lixschool.vercel.app"], methods: ["GET", "POST"] },
-})
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: { origin:[ "http://localhost:5173", "https://lixschool.vercel.app"], methods: ["GET", "POST"] },
+// })
 
 // Storing the io instance globally so routes can use it
-app.set("io", io);
+// app.set("io", io);
 
 // Basic socket connection log
-io.on("connection", (socket) => {
-  console.log("Socket connected:", socket.id);
+// io.on("connection", (socket) => {
+//   console.log("Socket connected:", socket.id);
 
-  socket.on("disconnect", () => {
-    console.log("Socket disconnected:", socket.id);
-  });
-});
+//   socket.on("disconnect", () => {
+//     console.log("Socket disconnected:", socket.id);
+//   });
+// });
 
 
 
