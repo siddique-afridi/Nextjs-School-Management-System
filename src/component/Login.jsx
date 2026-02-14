@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 import { User, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import socket from "../socket"
+// import socket from "../socket"
 import { API_BASE_URL } from "../utils/api";
 
 function Login() {
@@ -27,13 +27,13 @@ function Login() {
 
 
    // Listen for login events (this will trigger when ANY user logs in)
-  useEffect(() => {
-    socket.on("userLoggedIn", (data) => {
-      alert(data.message+ data.user.role);
-    });
+  // useEffect(() => {
+  //   socket.on("userLoggedIn", (data) => {
+  //     alert(data.message+ data.user.role);
+  //   });
 
-    return () => socket.off("userLoggedIn");
-  }, []);
+  //   return () => socket.off("userLoggedIn");
+  // }, []);
 
 
 

@@ -1,8 +1,8 @@
-import { io } from "socket.io-client";
-import { API_BASE_URL } from "./utils/api";
+// import { io } from "socket.io-client";
+// import { API_BASE_URL } from "./utils/api";
 
-const socket = io(`${API_BASE_URL}`, {
-  transports: ["websocket"],
-});
+// const socket = io(`${API_BASE_URL}`, {
+//   transports: ["websocket"],
+// });
 
-export default socket;
+// export default socket;
