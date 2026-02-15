@@ -24,7 +24,7 @@ function Login() {
       return () => clearInterval(timer);
     }
   }, [cooldown]);
-
+console.log("API Base URL:", API_BASE_URL);
 
    // Listen for login events (this will trigger when ANY user logs in)
   // useEffect(() => {
@@ -52,7 +52,7 @@ function Login() {
       // looking for otp required
 
       if (!res.ok) {
-        return setError(data.message || "Login failed");
+        return setError(data.message||data.error || "Login failed");
       }
 
       if (data.step === "OTP_REQUIRED") {
@@ -164,7 +164,7 @@ function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center p-4">
-      <div className=" absolute">sjcbk</div>
+      <div className="bg-yellow-300 animate-pulse top-0 px-2 w-full text-center py-1 z-1 absolute italic tracking-wider">Kindly login with valid email address, as you will get <span className="text-red-400 font-semibold">OTP verification</span> code</div>
       <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-8 relative overflow-hidden">
         {/* Logo */}
         <div className="flex justify-center mb-6">

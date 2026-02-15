@@ -18,9 +18,7 @@ router.post('/register', [
 // router.post('/login', login);
 
 router.post(
-    "/login",
-    passport.authenticate("local", { session: false }),
-    login
+    "/login",login
   );
 
   // Google OAuth routes

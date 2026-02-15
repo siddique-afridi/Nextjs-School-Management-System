@@ -1,32 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../component/AuthContext";
 
 function LoginSuccess() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const hasRun = useRef(false); // prevent double execution
 
   useEffect(() => {
-    console.log('called')
-    // extract token from URL
-    const params = new URLSearchParams(window.location.search);
-    console.log("params", params)
-    const token = params.get("token");
-    console.log("token is", token)
-    // if (!token) throw new Error("No authentication token found");
+    if (hasRun.current) return;
+    hasRun.current = true;
 
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
 
     if (token) {
-      login(token); // store token in context/localStorage
-      navigate("/dashboard"); // redirect to dashboard
-      console.log('navigating to dashboard')
-
+      login(token);
+      navigate("/dashboard");
     } else {
-        console.log("success-component");
-        console.warn("No token found, redirecting to login");
-      navigate("/login"); // fallback if no token
+      navigate("/login");
     }
-  }, [login]);
+  }, [login, navigate]);
 
   return (
     <div className="flex items-center justify-center h-screen text-gray-700">
