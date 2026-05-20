@@ -1,17 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./component/Login";
-import DashboardLayout from "./component/DashboardLayout";
-import Teachers from "./component/Teachers";
-import Students from "./component/Students";
-import Courses from "./component/Courses";
-import Dashboard from "./component/Dashboard";
-import ProtectedRoute from "./component/ProtectedRoute";
+import Login from "./components/Login";
+import DashboardLayout from "./components/DashboardLayout";
+import Teachers from "./components/Teachers";
+import Students from "./components/Students";
+import Courses from "./components/Courses";
+import Dashboard from "./components/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AdminProfile from "./component/AdminProfile";
-import Register from "./component/Register";
+import AdminProfile from "./components/AdminProfile";
+import Register from "./components/Register";
 import LoginSuccess from "./pages/LoginSuccess";
-import Result from "./component/Result/Result";
+import Result from "./components/Result/Result";
 
 
 function App() {

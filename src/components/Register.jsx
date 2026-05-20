@@ -34,7 +34,7 @@ const Register = () => {
       }
     } 
     catch (err) {
-      alert(","+ err.message);
+      alert("resgister api not hitted"+ err.message);
     }
   };
 

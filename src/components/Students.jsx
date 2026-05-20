@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import { createStudent, getStudents, deleteStudent } from "../api/studentApi";
 import { toast } from "react-toastify";
-import ClassSelect from "../component/ui/ClassSelect";
+import ClassSelect from "../components/ui/ClassSelect";
 import { CSVLink } from "react-csv";
 import { ProfileImageUpload } from "./ProfileImageUpload";
 import { getTeachers } from "../api/teacherApi";
@@ -233,7 +233,7 @@ function Students() {
 
   return (
     <div className="flex ">
-      <div className="flex-1 p-8 bg-white shadow-sm">
+      <div className="flex-1 p-8 bg-white shadow-sm z-40">
         {/* Page Header */}
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl dark:bg-black font-semibold text-gray-800">
@@ -339,7 +339,7 @@ function Students() {
             No students found matching "{search}"
           </p>
         )} */}
-      </div>
+   </div>
 
       {/* Add Student Modal */}
       {isOpen && (

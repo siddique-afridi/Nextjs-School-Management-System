@@ -1,0 +1,8 @@
+STEPS
+
+1 Controller for handling logic
+2 Route 
+3 server.js (path declare)
+4 frontend
+    1 chatbot Component
+    2

@@ -26,17 +26,6 @@ function Login() {
   }, [cooldown]);
 console.log("API Base URL:", API_BASE_URL);
 
-   // Listen for login events (this will trigger when ANY user logs in)
-  // useEffect(() => {
-  //   socket.on("userLoggedIn", (data) => {
-  //     alert(data.message+ data.user.role);
-  //   });
-
-  //   return () => socket.off("userLoggedIn");
-  // }, []);
-
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // if (!username || !password) return;
@@ -55,10 +44,19 @@ console.log("API Base URL:", API_BASE_URL);
         return setError(data.message||data.error || "Login failed");
       }
 
-      if (data.step === "OTP_REQUIRED") {
-        setStep("OTP"); //
-        setMessage(data.message);
-    } else {  
+    //   if (data.step === "OTP_REQUIRED") {
+    //     setStep("OTP"); 
+    //     setMessage(data.message);
+    // } 
+    const refineToken = res.headers.get("Authorization");
+
+      const token = refineToken ? refineToken.split(" ")[1] : null;
+
+  if (login(token)) {
+        navigate("/dashboard");
+      }
+
+    else {  
         setError("Unexpected response. Check backend flow.");
       }
     } catch (err) {
@@ -95,7 +93,8 @@ console.log("API Base URL:", API_BASE_URL);
       const token = refineToken ? refineToken.split(" ")[1] : null;
       // console.log("response status", res.status)
 
-      // localStorage.setItem("token", data.token);
+      localStorage.setItem("token", token);
+      localStorage.getItem('token')
       // login(data.token)
       if (login(token)) {
         navigate("/dashboard");

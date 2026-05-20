@@ -26,12 +26,12 @@ router.delete('/:id',
   authorizeRoles("teacher", "admin"),
    deleteStudent)
 
-console.log("getStudents:", getStudents);
-
 router.put('/:id', 
   auth,
+  authorizeRoles("teacher", "admin"),
   // updateValidator,
-   updateStudent);
+  updateStudent,
+);
 // console.log("createStudent:", createStudent);
 
 router.post('/upload-profile',

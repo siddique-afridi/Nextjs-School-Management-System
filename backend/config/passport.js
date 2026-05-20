@@ -30,49 +30,52 @@ passport.use(
 );
 
 // GOOGLE STRATEGY
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        process.env.NODE_ENV === "production"
-          ? "https://schoolserver.up.railway.app/api/auth/google/callback"
-          : "http://localhost:5000/api/auth/google/callback",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        const email = profile.emails[0].value;
+const googleClientID = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
-        // 1. Check if a user with this Google ID already exists
-        let user = await User.findOne({ googleId: profile.id });
+if (googleClientID && googleClientSecret) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: googleClientID,
+        clientSecret: googleClientSecret,
+        callbackURL:
+          process.env.NODE_ENV === "production"
+            ? "https://schoolserver.up.railway.app/api/auth/google/callback"
+            : "http://localhost:5000/api/auth/google/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const email = profile.emails[0].value;
 
-        if (!user) {
-          // 2. Check if a user with this email exists
-          user = await User.findOne({ email });
+          let user = await User.findOne({ googleId: profile.id });
 
-          if (user) {
-            // Attach Google ID to existing user
-            user.googleId = profile.id;
-            await user.save();
-          } else {
-            // 3. Create new user
-            user = await User.create({
-              username: profile.displayName,
-              email,
-              googleId: profile.id,
-            });
+          if (!user) {
+            user = await User.findOne({ email });
+
+            if (user) {
+              user.googleId = profile.id;
+              await user.save();
+            } else {
+              user = await User.create({
+                username: profile.displayName,
+                email,
+                googleId: profile.id,
+              });
+            }
           }
-        }
 
-        return done(null, user);
-      } catch (err) {
-        console.error("Google auth error:", err);
-        return done(err, false);
-      }
-    },
-  ),
-);
+          return done(null, user);
+        } catch (err) {
+          console.error("Google auth error:", err);
+          return done(err, false);
+        }
+      },
+    ),
+  );
+} else {
+  console.warn("Google OAuth is disabled because GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET is not set.");
+}
 
 // serialize + deserialize (optional if using sessions)
 passport.serializeUser((user, done) => done(null, user.id));
