@@ -60,7 +60,7 @@ console.log("API Base URL:", API_BASE_URL);
         setError("Unexpected response. Check backend flow.");
       }
     } catch (err) {
-      setError("API not hitting");
+      setError("Railway free trial ended");
     }
   };
 
