@@ -143,7 +143,7 @@ console.log("API Base URL:", API_BASE_URL);
         setError(data.message || "Failed to resend OTP");
       }
     } catch (err) {
-      setError("API not hitting");
+      setError("Railway free trial ended");
     }
   };
 
