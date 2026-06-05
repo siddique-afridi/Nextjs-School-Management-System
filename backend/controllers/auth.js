@@ -64,7 +64,19 @@ exports.login = async (req, res, next) => {
 
       await sendOtpEmail(user, otp, 10);
 
-      return res.status(200).json({
+      const payload = {
+      id: user._id,
+      email: user.email,
+      name: user.username,
+      role: user.role,
+    };
+
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1h"})
+
+      return res
+      .status(200)
+      .header("Authorization", `Bearer ${token}`)
+      .json({
         message: "OTP sent to your email. Enter the code to complete login.",
         step: "OTP_REQUIRED",
       });
