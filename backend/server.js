@@ -6,6 +6,7 @@ const passport = require("passport");
 const apiLogger = require("./middleware/apiLogger");
 const connectDB = require("./config/db");
 const limiter = require("./middleware/rateLimiter");
+const Routes = require("./routes/routes")
 
 require("./config/passport");
 
@@ -43,51 +44,19 @@ app.use((_, res, next) => {
   next();
 });
 
-
-app.get('/health/check', (req,res,next) =>{
+app.get("/", (req, res, next) => {
   return res.json({
     success: 1,
-    message: 'Yes i am running!',
+    message: "Yes i am running!",
     response: 200,
-    data:{}
-  })
+    data: {},
+  });
 })
-app.get("/", (req, res) => {
-  res.send("Backend is running");
-});
 
-
-
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use("/api/admin", require("./routes/adminRoutes")); 
-app.use('/api/students', require('./routes/studentRoutes'));
-app.use('/api/teachers', require('./routes/teacherRoutes'));
-app.use('/api/dashboard-stats', require('./routes/dashboard-stats'))
-app.use('/api/results', require('./routes/ResultRoutes'))
-app.use('/api/courses', require('./routes/courseRoutes'))
-app.use('/api/result-data', require('./routes/result-dataRoute'))
-app.use('/api/chatbot', require("./routes/chatbotRoutes"))
-
-app.use('/aggregation', require('./routes/aggroute'))
-// app.use('/api/dashboard', require('./routes/adminRoutes'));
-
-
-
+app.use('/api', Routes)
 
 const UPLOADS_PATH = path.join(__dirname, "uploads");
 app.use("/uploads", express.static(UPLOADS_PATH));
-
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: "Not found" });
-});
-
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || "Internal Server Error",
-  });
-});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
