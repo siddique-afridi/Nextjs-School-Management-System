@@ -1,9 +1,8 @@
-const morgan = require('morgan');
-const chalk = require('chalk');
+import morgan from "morgan";
+import chalk from "chalk";
 
 morgan.token("time", () => chalk.gray(new Date().toLocaleTimeString()));
 
-// Method with colored badge
 morgan.token("methodColor", (req) => {
   const method = req.method;
   if (method === "GET") return chalk.bgGreen.black(` ${method} `);
@@ -13,8 +12,7 @@ morgan.token("methodColor", (req) => {
   return chalk.white(method);
 });
 
-// Status with color
-morgan.token("statusColor", (req, res) => {
+morgan.token("statusColor", (_req, res) => {
   const s = res.statusCode;
   if (s >= 500) return chalk.bgRed.white(` ${s} `);
   if (s >= 400) return chalk.yellow(s);
@@ -23,7 +21,6 @@ morgan.token("statusColor", (req, res) => {
   return chalk.white(s);
 });
 
-// Custom format string
 const format = [
   chalk.magenta("📌"),
   ":time",
@@ -32,10 +29,9 @@ const format = [
   "=>",
   ":statusColor",
   chalk.gray(":response-time ms"),
-  chalk.gray("- :res[content-length] bytes")
+  chalk.gray("- :res[content-length] bytes"),
 ].join("  ");
-
 
 const apiLogger = morgan(format);
 
-module.exports = apiLogger;
+export default apiLogger;

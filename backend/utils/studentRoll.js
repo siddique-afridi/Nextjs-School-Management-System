@@ -1,13 +1,20 @@
+import mongoose from "mongoose";
 
-const Counter = require("../models/Counter");
+const Counter = mongoose.model(
+  "Counter",
+  new mongoose.Schema({
+    id: String,
+    seq: Number,
+  }),
+);
 
 const getNextRollNo = async () => {
   const counter = await Counter.findOneAndUpdate(
-    { id: "studentRoll" },       // the counter document
-    { $inc: { seq: 1 } },        // increment by 1
-    { new: true, upsert: true }  // create if doesn't exist
+    { id: "studentRoll" },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true },
   );
-  return counter.seq;            // this is the new roll number
+  return counter.seq;
 };
 
-module.exports = getNextRollNo;
+export default getNextRollNo;

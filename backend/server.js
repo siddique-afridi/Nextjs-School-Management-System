@@ -1,16 +1,19 @@
-const path = require("path");
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const passport = require("passport");
-const apiLogger = require("./middleware/apiLogger");
-const connectDB = require("./config/db");
-const limiter = require("./middleware/rateLimiter");
-const Routes = require("./routes/routes")
-
-require("./config/passport");
+import path from "path";
+import { fileURLToPath } from "url";
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import passport from "passport";
+import apiLogger from "./middleware/apiLogger.js";
+import connectDB from "./config/db.js";
+import limiter from "./middleware/rateLimiter.js";
+import Routes from "./routes/routes.js";
+import "./config/passport.js";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const isProduction = process.env.NODE_ENV === "production";
 const allowedOrigins = [
   "http://localhost:5173",
@@ -36,7 +39,8 @@ connectDB();
 app.use(apiLogger);
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(limiter);
 app.use(passport.initialize());
 
 app.use((_, res, next) => {
@@ -44,16 +48,16 @@ app.use((_, res, next) => {
   next();
 });
 
-app.get("/", (req, res, next) => {
+app.get("/", (_req, res) => {
   return res.json({
     success: 1,
     message: "Yes i am running!",
     response: 200,
     data: {},
   });
-})
+});
 
-app.use('/api', Routes)
+app.use("/api", Routes);
 
 const UPLOADS_PATH = path.join(__dirname, "uploads");
 app.use("/uploads", express.static(UPLOADS_PATH));
