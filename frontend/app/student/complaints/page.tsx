@@ -6,13 +6,13 @@ import { DataTable, Column } from "@/components/shared/DataTable";
 import { FormDialog } from "@/components/shared/FormDialog";
 import { Complaint } from "@/lib/constants";
 import { mockComplaints } from "@/lib/data";
-import { useAuthStore } from "@/lib/auth-context";
+import { useAuth } from "@/app/context/userContext";
 import { Plus, CheckCircle, Clock } from "lucide-react";
 
 export default function ComplaintsPage() {
   const [complaints, setComplaints] = useState<Complaint[]>(mockComplaints);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const user = useAuthStore((state) => state.user);
+  const { user } = useAuth();
 
   const handleSubmitComplaint = (formData: Record<string, any>) => {
     const newComplaint: Complaint = {

@@ -2,13 +2,13 @@
 
 import { StatCard } from "@/components/shared/StatCard";
 import { DataTable, Column } from "@/components/shared/DataTable";
-import { useAuthStore } from "@/lib/auth-context";
+import { useAuth } from "@/app/context/userContext";
 import { Student } from "@/lib/constants";
 import { mockStudents } from "@/lib/data";
 import { Users, GraduationCap } from "lucide-react";
 
 export default function MyClassPage() {
-  const user = useAuthStore((state) => state.user);
+  const { user } = useAuth();
   const teacher = user as any;
 
   // In a real app, filter by teacher's assigned class

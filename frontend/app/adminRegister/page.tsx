@@ -10,7 +10,7 @@ import {
 } from "../schemas/adminRegisterSchema";
 import client from "@/lib/client";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 function page() {
   const router = useRouter()

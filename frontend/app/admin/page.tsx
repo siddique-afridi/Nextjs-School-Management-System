@@ -1,50 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/shared/StatCard";
 import { NoticeCard } from "@/components/shared/NoticeCard";
-import {
-  LayoutDashboard,
-  Users,
-  BookOpen,
-  GraduationCap,
-  Bell,
-  MessageSquare,
-  Plus,
-} from "lucide-react";
-import {
-  mockClasses,
-  mockStudents,
-  mockTeachers,
-  mockSubjects,
-  mockNotices,
-  mockComplaints,
-} from "@/lib/data";
+import { Users, BookOpen, GraduationCap, Plus } from "lucide-react";
 import Link from "next/link";
+import { useSchoolId } from "@/hooks/useSchoolId";
+import { fetchClasses } from "@/app/services/class.service";
+import { fetchStudents } from "@/app/services/student.service";
+import { fetchTeachers } from "@/app/services/teacher.service";
+import { fetchSubjects } from "@/app/services/subject.service";
+import { fetchNotices } from "@/app/services/notice.service";
+import { fetchComplaints } from "@/app/services/complaint.service";
+import { Complaint, Notice } from "@/lib/constants";
 
 export default function AdminDashboard() {
+  const schoolId = useSchoolId();
+  const [counts, setCounts] = useState({ students: 0, teachers: 0, classes: 0, subjects: 0 });
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [complaints, setComplaints] = useState<Complaint[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!schoolId) return;
+
+    Promise.all([
+      fetchStudents(schoolId),
+      fetchTeachers(schoolId),
+      fetchClasses(schoolId),
+      fetchSubjects(schoolId),
+      fetchNotices(schoolId),
+      fetchComplaints(schoolId),
+    ])
+      .then(([students, teachers, classes, subjects, noticeList, complaintList]) => {
+        setCounts({
+          students: students.length,
+          teachers: teachers.length,
+          classes: classes.length,
+          subjects: subjects.length,
+        });
+        setNotices(noticeList);
+        setComplaints(complaintList);
+      })
+      .finally(() => setLoading(false));
+  }, [schoolId]);
+
   const stats = [
-    {
-      title: "Total Students",
-      value: mockStudents.length,
-      icon: GraduationCap,
-    },
-    {
-      title: "Total Teachers",
-      value: mockTeachers.length,
-      icon: Users,
-    },
-    {
-      title: "Total Classes",
-      value: mockClasses.length,
-      icon: BookOpen,
-    },
-    {
-      title: "Total Subjects",
-      value: mockSubjects.length,
-      icon: BookOpen,
-    },
+    { title: "Total Students", value: counts.students, icon: GraduationCap },
+    { title: "Total Teachers", value: counts.teachers, icon: Users },
+    { title: "Total Classes", value: counts.classes, icon: BookOpen },
+    { title: "Total Subjects", value: counts.subjects, icon: BookOpen },
   ];
 
   const quickActions = [
@@ -54,26 +60,25 @@ export default function AdminDashboard() {
     { label: "Add Subject", href: "/admin/subjects" },
   ];
 
+  if (loading) {
+    return <p className="text-muted-foreground">Loading dashboard...</p>;
+  }
+
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
-        <p className="mt-1 text-muted-foreground">
-          Welcome back! Here&apos;s your school overview.
-        </p>
+        <p className="mt-1 text-muted-foreground">Live data from your school database.</p>
       </div>
 
-      {/* Statistics */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <StatCard key={stat.title} {...stat} />
         ))}
       </div>
 
-      {/* Quick Actions */}
       <div>
-        <h2 className="text-xl font-bold text-foreground mb-4">Quick Actions</h2>
+        <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
         <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {quickActions.map((action) => (
             <Link key={action.label} href={action.href}>
@@ -86,75 +91,46 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Recent Notices */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-foreground">Recent Notices</h2>
-          <Link href="/admin/notices">
-            <Button variant="ghost" size="sm">
-              View All
-            </Button>
-          </Link>
+          <h2 className="text-xl font-bold">Recent Notices</h2>
+          <Link href="/admin/notices"><Button variant="ghost" size="sm">View All</Button></Link>
         </div>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {mockNotices.slice(0, 3).map((notice) => (
+          {notices.slice(0, 3).map((notice) => (
             <NoticeCard key={notice.id} notice={notice} />
           ))}
+          {notices.length === 0 && <p className="text-muted-foreground text-sm">No notices yet.</p>}
         </div>
       </div>
 
-      {/* Pending Complaints */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-foreground">Pending Complaints</h2>
-          <Link href="/admin/complaints">
-            <Button variant="ghost" size="sm">
-              View All
-            </Button>
-          </Link>
+          <h2 className="text-xl font-bold">Recent Complaints</h2>
+          <Link href="/admin/complaints"><Button variant="ghost" size="sm">View All</Button></Link>
         </div>
-        <div className="rounded-lg border border-border bg-card">
-          <div className="overflow-x-auto">
+        {complaints.length === 0 ? (
+          <p className="text-muted-foreground text-sm">No complaints yet.</p>
+        ) : (
+          <div className="rounded-lg border">
             <table className="w-full">
-              <thead className="border-b border-border bg-muted/50">
+              <thead className="border-b bg-muted/50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">
-                    Student
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">
-                    Title
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">
-                    Status
-                  </th>
+                  <th className="px-4 py-3 text-left text-sm">Student</th>
+                  <th className="px-4 py-3 text-left text-sm">Complaint</th>
                 </tr>
               </thead>
               <tbody>
-                {mockComplaints
-                  .filter((c) => c.status === "pending")
-                  .slice(0, 5)
-                  .map((complaint) => (
-                    <tr
-                      key={complaint.id}
-                      className="border-b border-border hover:bg-muted/50 transition-colors"
-                    >
-                      <td className="px-4 py-3 text-sm text-foreground">
-                        {complaint.student.name}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-foreground">
-                        {complaint.title}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <span className="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
-                          Pending
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                {complaints.slice(0, 5).map((c) => (
+                  <tr key={c.id} className="border-b">
+                    <td className="px-4 py-3 text-sm">{c.student.name}</td>
+                    <td className="px-4 py-3 text-sm">{c.description}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

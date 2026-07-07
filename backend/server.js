@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "passport";
 import apiLogger from "./middleware/apiLogger.js";
@@ -16,6 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const isProduction = process.env.NODE_ENV === "production";
 const allowedOrigins = [
+  "http://localhost:3000",
   "http://localhost:5173",
   "https://lixschool.vercel.app",
   "https://www.lixschool.vercel.app",
@@ -27,6 +29,7 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error("Not allowed by CORS"));
   },
+  credentials:true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   exposedHeaders: ["Authorization"],
@@ -40,6 +43,7 @@ app.use(apiLogger);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(limiter);
 app.use(passport.initialize());
 

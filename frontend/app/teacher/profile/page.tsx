@@ -1,9 +1,9 @@
 "use client";
 
-import { useAuthStore } from "@/lib/auth-context";
+import { useAuth } from "@/app/context/userContext";
 
 export default function TeacherProfilePage() {
-  const user = useAuthStore((state) => state.user);
+  const { user } = useAuth();
   const teacher = user as any;
 
   return (

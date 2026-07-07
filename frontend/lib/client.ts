@@ -1,17 +1,27 @@
-import axios from 'axios'
-import { getToken } from './auth'
+import axios from "axios";
+import { removeSessionUser, removeToken } from "./auth";
 
 const client = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
-})
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+  withCredentials: true,
+});
 
-client.interceptors.request.use((config)=> {
-    const token = getToken();
+let onUnauthorized: (() => void) | null = null;
 
-    if(token)
-        config.headers.Authorization = `Bearer ${token}`
+export const setUnauthorizedHandler = (handler: () => void) => {
+  onUnauthorized = handler;
+};
 
-    return config
-})
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      removeToken();
+      removeSessionUser();
+      onUnauthorized?.();
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default client;

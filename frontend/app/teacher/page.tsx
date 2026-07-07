@@ -4,11 +4,11 @@ import { StatCard } from "@/components/shared/StatCard";
 import { Button } from "@/components/ui/button";
 import { Users, Clock, BookOpen, GraduationCap } from "lucide-react";
 import Link from "next/link";
-import { useAuthStore } from "@/lib/auth-context";
+import { useAuth } from "@/app/context/userContext";
 import { mockAttendance, mockStudents } from "@/lib/data";
 
 export default function TeacherDashboard() {
-  const user = useAuthStore((state) => state.user);
+  const { user } = useAuth();
   const teacher = user as any;
 
   // Calculate attendance stats

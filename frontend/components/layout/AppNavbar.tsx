@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/auth-context";
+import { useAuth } from "@/app/context/userContext";
 import { LogOut, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,10 +11,10 @@ interface AppNavbarProps {
 
 export function AppNavbar({ onMenuClick }: AppNavbarProps) {
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/login");
   };
 
@@ -36,13 +36,18 @@ export function AppNavbar({ onMenuClick }: AppNavbarProps) {
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-2">
             <img
-              src={user?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=User"}
+              src={
+                user?.avatar ||
+                "https://api.dicebear.com/7.x/avataaars/svg?seed=User"
+              }
               alt={user?.name || "User"}
               className="h-8 w-8 rounded-full"
             />
             <div className="text-sm">
               <p className="font-medium text-foreground">{user?.name}</p>
-              <p className="text-xs text-muted-foreground capitalize">{user?.role}</p>
+              <p className="text-xs text-muted-foreground capitalize">
+                {user?.role}
+              </p>
             </div>
           </div>
 

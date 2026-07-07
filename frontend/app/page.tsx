@@ -2,30 +2,22 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-// import { useAuthStore } from "@/lib/auth-context";
-import { UserRole } from "@/lib/constants";
+import { getDashboardPath, useAuth } from "./context/userContext";
 
 export default function Home() {
   const router = useRouter();
-  // const user = useAuthStore((state) => state.user);
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
+    if (isLoading) return;
+
     if (!user) {
       router.push("/login");
-    } else {
-      switch (user.role) {
-        case UserRole.ADMIN:
-          router.push("/admin");
-          break;
-        case UserRole.TEACHER:
-          router.push("/teacher");
-          break;
-        case UserRole.STUDENT:
-          router.push("/student");
-          break;
-      }
+      return;
     }
-  }, [user, router]);
+
+    router.push(getDashboardPath(user.role));
+  }, [user, isLoading, router]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

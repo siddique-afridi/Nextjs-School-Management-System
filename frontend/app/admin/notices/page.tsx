@@ -1,50 +1,76 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { FormDialog } from "@/components/shared/FormDialog";
 import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 import { NoticeCard } from "@/components/shared/NoticeCard";
 import { Notice } from "@/lib/constants";
-import { mockNotices } from "@/lib/data";
 import { Plus, Trash2 } from "lucide-react";
-import { useAuthStore } from "@/lib/auth-context";
+import { useSchoolId } from "@/hooks/useSchoolId";
+import {
+  createNotice,
+  deleteNotice,
+  fetchNotices,
+} from "@/app/services/notice.service";
 
 export default function NoticesPage() {
-  const [notices, setNotices] = useState<Notice[]>(mockNotices);
+  const schoolId = useSchoolId();
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
-  const user = useAuthStore((state) => state.user);
+
+  const loadNotices = async () => {
+    if (!schoolId) return;
+    setLoading(true);
+    try {
+      setNotices(await fetchNotices(schoolId));
+    } catch {
+      setError("Failed to load notices");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadNotices();
+  }, [schoolId]);
 
   const filteredNotices = useMemo(() => {
     return notices.filter(
-      (notice) =>
-        notice.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        notice.content.toLowerCase().includes(searchQuery.toLowerCase())
+      (n) =>
+        n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        n.content.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [notices, searchQuery]);
 
-  const handleAddNotice = (formData: Record<string, any>) => {
-    const newNotice: Notice = {
-      id: `n${Date.now()}`,
-      title: formData.title,
-      content: formData.content,
-      createdBy: user as any,
-      createdAt: new Date(),
-      expiresAt: formData.expiresAt ? new Date(formData.expiresAt) : undefined,
-    };
-    setNotices([newNotice, ...notices]);
-    setIsFormOpen(false);
+  const handleAddNotice = async (formData: Record<string, string>) => {
+    try {
+      const created = await createNotice(schoolId, {
+        title: formData.title,
+        content: formData.content,
+      });
+      setNotices((prev) => [created, ...prev]);
+      setIsFormOpen(false);
+    } catch {
+      setError("Failed to create notice");
+    }
   };
 
-  const handleDeleteNotice = () => {
-    if (selectedNotice) {
-      setNotices(notices.filter((n) => n.id !== selectedNotice.id));
+  const handleDeleteNotice = async () => {
+    if (!selectedNotice) return;
+    try {
+      await deleteNotice(selectedNotice.id);
+      setNotices((prev) => prev.filter((n) => n.id !== selectedNotice.id));
       setIsDeleteOpen(false);
       setSelectedNotice(null);
+    } catch {
+      setError("Failed to delete notice");
     }
   };
 
@@ -53,9 +79,7 @@ export default function NoticesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Notices</h1>
-          <p className="mt-1 text-muted-foreground">
-            Create and manage school notices
-          </p>
+          <p className="mt-1 text-muted-foreground">Create and manage school notices</p>
         </div>
         <Button onClick={() => setIsFormOpen(true)} className="gap-2">
           <Plus className="h-4 w-4" />
@@ -63,27 +87,27 @@ export default function NoticesPage() {
         </Button>
       </div>
 
-      <SearchBar
-        placeholder="Search notices..."
-        onSearch={setSearchQuery}
-      />
-
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {filteredNotices.map((notice) => (
-          <div key={notice.id} className="relative">
-            <NoticeCard notice={notice} />
-            <button
-              onClick={() => {
-                setSelectedNotice(notice);
-                setIsDeleteOpen(true);
-              }}
-              className="absolute top-4 right-4 p-1 hover:bg-muted rounded transition-colors opacity-0 hover:opacity-100"
-            >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </button>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {loading ? (
+        <p className="text-muted-foreground">Loading...</p>
+      ) : (
+        <>
+          <SearchBar placeholder="Search notices..." onSearch={setSearchQuery} />
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {filteredNotices.map((notice) => (
+              <div key={notice.id} className="relative group">
+                <NoticeCard notice={notice} />
+                <button
+                  onClick={() => { setSelectedNotice(notice); setIsDeleteOpen(true); }}
+                  className="absolute top-4 right-4 p-1 hover:bg-muted rounded opacity-0 group-hover:opacity-100"
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </button>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       <FormDialog
         isOpen={isFormOpen}
@@ -93,52 +117,21 @@ export default function NoticesPage() {
         submitLabel="Create Notice"
       >
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            placeholder="Notice title"
-            required
-            className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+          <label className="block text-sm font-medium mb-2">Title</label>
+          <input type="text" name="title" required className="w-full rounded-lg border px-4 py-2" />
         </div>
-
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Content
-          </label>
-          <textarea
-            name="content"
-            placeholder="Notice content"
-            rows={4}
-            required
-            className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Expires At (Optional)
-          </label>
-          <input
-            type="date"
-            name="expiresAt"
-            className="w-full rounded-lg border border-input bg-background px-4 py-2 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+          <label className="block text-sm font-medium mb-2">Content</label>
+          <textarea name="content" rows={4} required className="w-full rounded-lg border px-4 py-2" />
         </div>
       </FormDialog>
 
       <ConfirmDeleteDialog
         isOpen={isDeleteOpen}
         title="Delete Notice"
-        description="Are you sure you want to delete this notice? This action cannot be undone."
+        description="Delete this notice?"
         onConfirm={handleDeleteNotice}
-        onCancel={() => {
-          setIsDeleteOpen(false);
-          setSelectedNotice(null);
-        }}
+        onCancel={() => { setIsDeleteOpen(false); setSelectedNotice(null); }}
       />
     </div>
   );

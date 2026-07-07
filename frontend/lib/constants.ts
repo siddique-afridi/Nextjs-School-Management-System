@@ -1,18 +1,30 @@
 // User Roles
 export enum UserRole {
-  ADMIN = "admin",
-  TEACHER = "teacher",
-  STUDENT = "student",
+  ADMIN = "Admin",
+  TEACHER = "Teacher",
+  STUDENT = "Student",
 }
 
 // Types for data models
 export interface User {
-  id: string;
+  _id: string;
   name: string;
-  email: string;
+  email?: string;
   role: UserRole;
   phone?: string;
   avatar?: string;
+}
+
+/** Extended user shape stored in auth context after login */
+export interface AuthUser extends User {
+  schoolName?: string;
+  school?: { _id: string; schoolName: string };
+  rollNum?: number;
+  sclassName?: { _id: string; sclassName: string };
+  teachSubject?: { _id: string; subName: string; sessions?: string };
+  teachSclass?: { _id: string; sclassName: string };
+  examResult?: unknown[];
+  attendance?: unknown[];
 }
 
 export interface Admin extends User {
@@ -88,11 +100,20 @@ export interface Complaint {
 }
 
 export interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
+  isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => void;
-  logout: () => void;
-  setUser: (user: User | null) => void;
+  login: (credentials: LoginCredentials) => Promise<AuthUser>;
+  logout: () => Promise<void>;
+  setUser: (user: AuthUser | null) => void;
+}
+
+export interface LoginCredentials {
+  role: UserRole;
+  email?: string;
+  password: string;
+  rollNum?: string;
+  studentName?: string;
 }
 
 // Dashboard statistics
@@ -103,4 +124,16 @@ export interface DashboardStats {
   totalSubjects: number;
   totalNotices: number;
   totalComplaints: number;
+}
+
+export interface LoginResponse {    
+  message: string;
+  token: string;
+  user: {
+    _id: string;    
+    name: string;
+    email: string;
+    schoolName: string;
+    role: UserRole;
+  }
 }
