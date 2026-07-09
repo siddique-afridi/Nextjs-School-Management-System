@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import Teacher from "../models/Teacher.js";
 import Subject from "../models/Subjects.js";
+import { generateToken } from "../utils/generateToken.js";
+import { setAuthCookie } from "../utils/authCookie.js";
 
 const teacherRegister = async (req, res) => {
   const { name, email, password, role, school, teachSubject, teachSclass } = req.body;
@@ -35,12 +37,14 @@ const teacherLogIn = async (req, res) => {
         teacher = await teacher.populate("school", "schoolName");
         teacher = await teacher.populate("teachSclass", "sclassName");
         teacher.password = undefined;
-        res.send(teacher);
+        const token = generateToken(teacher._id, "Teacher");
+        setAuthCookie(res, token);
+        return res.status(200).json({ message: "Login successful", user: teacher, token });
       } else {
-        res.send({ message: "Invalid password" });
+        return res.status(401).json({ message: "Invalid password" });
       }
     } else {
-      res.send({ message: "Teacher not found" });
+      return res.status(404).json({ message: "Teacher not found" });
     }
   } catch (err) {
     res.status(500).json(err);

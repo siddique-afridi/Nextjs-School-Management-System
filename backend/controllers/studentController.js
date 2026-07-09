@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import Student from "../models/Students.js";
 import Subject from "../models/Subjects.js";
+import { generateToken } from "../utils/generateToken.js";
+import { setAuthCookie } from "../utils/authCookie.js";
 
 const studentRegister = async (req, res) => {
   try {
@@ -43,12 +45,14 @@ const studentLogIn = async (req, res) => {
         student.password = undefined;
         student.examResult = undefined;
         student.attendance = undefined;
-        res.send(student);
+        const token = generateToken(student._id, "Student");
+        setAuthCookie(res, token);
+        return res.status(200).json({ message: "Login successful", user: student, token });
       } else {
-        res.send({ message: "Invalid password" });
+        return res.status(401).json({ message: "Invalid password" });
       }
     } else {
-      res.send({ message: "Student not found" });
+      return res.status(404).json({ message: "Student not found" });
     }
   } catch (err) {
     res.status(500).json(err);

@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import Admin from "../models/Admin.js";
 import { generateToken } from "../utils/generateToken.js";
+import { setAuthCookie } from "../utils/authCookie.js";
 
 const adminRegister = async (req, res) => {
   try {
@@ -59,16 +60,11 @@ const adminLogIn = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = generateToken(admin);
+    const token = generateToken(admin._id, "Admin");
     const adminData = admin.toObject();
     delete adminData.password;
 
-      res.cookie("accessToken", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+    setAuthCookie(res, token);
 
     return res.status(200).json({
       message: "Login successful",

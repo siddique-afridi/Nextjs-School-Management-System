@@ -11,7 +11,10 @@ import limiter from "./middleware/rateLimiter.js";
 import Routes from "./routes/routes.js";
 import "./config/passport.js";
 
-dotenv.config();
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || "development"}`
+});
+console.log("Environment:", process.env.NODE_ENV);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,14 +1,8 @@
+import { clearAuthCookie } from "../utils/authCookie.js";
 
-const logout = (req, res) => {
-  res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
-
-  return res.status(200).json({
-    message: "Logged out successfully",
-  });
+const logout = (_req, res) => {
+  clearAuthCookie(res);
+  return res.status(200).json({ message: "Logged out successfully" });
 };
 
 export default logout;
