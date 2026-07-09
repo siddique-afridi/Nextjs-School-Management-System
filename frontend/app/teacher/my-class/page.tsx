@@ -1,90 +1,61 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { StatCard } from "@/components/shared/StatCard";
 import { DataTable, Column } from "@/components/shared/DataTable";
 import { useAuth } from "@/app/context/userContext";
+import { fetchClassStudents } from "@/app/services/portal/teacher.portal";
 import { Student } from "@/lib/constants";
-import { mockStudents } from "@/lib/data";
-import { Users, GraduationCap } from "lucide-react";
+import { GraduationCap, Users } from "lucide-react";
+
+type StudentRow = Student & { id: string };
 
 export default function MyClassPage() {
   const { user } = useAuth();
-  const teacher = user as any;
+  const [students, setStudents] = useState<StudentRow[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // In a real app, filter by teacher's assigned class
-  const classStudents = mockStudents;
+  const className = user?.teachSclass?.sclassName ?? "My Class";
 
-  const columns: Column<Student>[] = [
+  useEffect(() => {
+    const classId = user?.teachSclass?._id;
+    if (!classId) return;
+    fetchClassStudents(classId)
+      .then(setStudents)
+      .finally(() => setLoading(false));
+  }, [user?.teachSclass?._id]);
+
+  const columns: Column<StudentRow>[] = [
     {
       key: "name",
       label: "Name",
-      sortable: true,
       render: (value, student) => (
         <div className="flex items-center gap-2">
-          <img
-            src={student.avatar}
-            alt={student.name}
-            className="h-8 w-8 rounded-full"
-          />
+          <img src={student.avatar} alt={student.name} className="h-8 w-8 rounded-full" />
           {value}
         </div>
       ),
     },
-    {
-      key: "studentId",
-      label: "Student ID",
-      sortable: true,
-    },
-    {
-      key: "email",
-      label: "Email",
-    },
-    {
-      key: "dob",
-      label: "Date of Birth",
-    },
+    { key: "studentId", label: "Roll No" },
   ];
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground">My Class</h1>
-        <p className="mt-1 text-muted-foreground">
-          View details about your assigned class
-        </p>
+        <p className="mt-1 text-muted-foreground">{className}</p>
       </div>
 
-      {/* Class Info */}
-      <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-xl font-bold text-foreground">
-          {teacher?.assignedClass?.name || "Class Information"}
-        </h2>
-        <p className="mt-2 text-muted-foreground">
-          {teacher?.assignedClass?.description || "No description available"}
-        </p>
-      </div>
-
-      {/* Statistics */}
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-        <StatCard
-          title="Total Students"
-          value={classStudents.length}
-          icon={GraduationCap}
-          description="Students in this class"
-        />
-        <StatCard
-          title="Class Code"
-          value={teacher?.assignedClass?.name || "N/A"}
-          icon={Users}
-          description="Class identifier"
-        />
+        <StatCard title="Total Students" value={students.length} icon={GraduationCap} />
+        <StatCard title="Class" value={className} icon={Users} />
       </div>
 
-      {/* Students Table */}
-      <div>
-        <h3 className="text-lg font-bold text-foreground mb-4">Students Enrolled</h3>
-        <DataTable columns={columns} data={classStudents} />
-      </div>
+      {loading ? (
+        <p className="text-muted-foreground">Loading students...</p>
+      ) : (
+        <DataTable columns={columns} data={students} />
+      )}
     </div>
   );
 }

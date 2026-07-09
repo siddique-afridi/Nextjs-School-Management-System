@@ -9,26 +9,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  AuthContextType,
-  AuthUser,
-  LoginCredentials,
-  UserRole,
-} from "@/lib/constants";
-import {
-  getDashboardPath,
-  getSessionUser,
-  removeSessionUser,
-  removeToken,
-  saveSessionUser,
-  saveToken,
-} from "@/lib/auth";
+import { AuthContextType, AuthUser, LoginCredentials } from "@/lib/constants";
+import { removeToken, saveToken } from "@/lib/auth";
 import { getMe, login as loginApi, logoutApi } from "@/app/services/auth.service";
 import { setUnauthorizedHandler } from "@/lib/client";
 
-type UserProviderProps = {
-  children: ReactNode;
-};
+type UserProviderProps = { children: ReactNode };
 
 const UserContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -39,34 +25,23 @@ export function UserProvider({ children }: UserProviderProps) {
   const clearAuth = useCallback(() => {
     setUser(null);
     removeToken();
-    removeSessionUser();
   }, []);
 
   const logout = useCallback(async () => {
     try {
-      if (user?.role === UserRole.ADMIN) {
-        await logoutApi();
-      }
+      await logoutApi();
     } catch {
-      // Clear local state even if API call fails
+      // still clear local state
     } finally {
       clearAuth();
     }
-  }, [user?.role, clearAuth]);
+  }, [clearAuth]);
 
   const hydrate = useCallback(async () => {
     setIsLoading(true);
-
-    const sessionUser = getSessionUser<AuthUser>();
-    if (sessionUser) {
-      setUser(sessionUser);
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const admin = await getMe();
-      setUser(admin);
+      const me = await getMe();
+      setUser(me);
     } catch {
       clearAuth();
     } finally {
@@ -75,24 +50,14 @@ export function UserProvider({ children }: UserProviderProps) {
   }, [clearAuth]);
 
   useEffect(() => {
-    setUnauthorizedHandler(() => {
-      clearAuth();
-    });
+    setUnauthorizedHandler(clearAuth);
     hydrate();
   }, [hydrate, clearAuth]);
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     const { user: authenticatedUser, token } = await loginApi(credentials);
     setUser(authenticatedUser);
-
-    if (authenticatedUser.role === UserRole.ADMIN) {
-      if (token) saveToken(token);
-      removeSessionUser();
-    } else {
-      saveSessionUser(authenticatedUser);
-      removeToken();
-    }
-
+    if (token) saveToken(token);
     return authenticatedUser;
   }, []);
 
@@ -113,10 +78,8 @@ export function UserProvider({ children }: UserProviderProps) {
 
 export function useAuth(): AuthContextType {
   const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useAuth must be used within a UserProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within a UserProvider");
   return context;
 }
 
-export { getDashboardPath };
+export { getDashboardPath } from "@/lib/auth";

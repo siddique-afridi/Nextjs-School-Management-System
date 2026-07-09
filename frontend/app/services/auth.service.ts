@@ -6,57 +6,67 @@ import {
   UserRole,
 } from "@/lib/constants";
 
-interface TeacherLoginResponse {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  school?: { _id: string; schoolName: string };
-  teachSubject?: { _id: string; subName: string; sessions?: string };
-  teachSclass?: { _id: string; sclassName: string };
-  message?: string;
+type ApiUser = Record<string, unknown>;
+
+interface AuthApiResponse {
+  message: string;
+  user: ApiUser;
+  token?: string;
 }
 
-interface StudentLoginResponse {
-  _id: string;
-  name: string;
-  rollNum: number;
-  role: string;
-  school?: { _id: string; schoolName: string };
-  sclassName?: { _id: string; sclassName: string };
-  message?: string;
-}
+export function mapApiUserToAuthUser(data: ApiUser): AuthUser {
+  const role = String(data.role ?? "Admin") as UserRole;
 
-function mapAdminUser(user: LoginResponse["user"]): AuthUser {
+  if (role === UserRole.ADMIN) {
+    return {
+      _id: String(data._id),
+      name: String(data.name),
+      email: String(data.email ?? ""),
+      role: UserRole.ADMIN,
+      schoolName: String(data.schoolName ?? ""),
+    };
+  }
+
+  if (role === UserRole.TEACHER) {
+    const teachSubject = data.teachSubject as ApiUser | undefined;
+    const teachSclass = data.teachSclass as ApiUser | undefined;
+    const school = data.school as ApiUser | undefined;
+    return {
+      _id: String(data._id),
+      name: String(data.name),
+      email: String(data.email ?? ""),
+      role: UserRole.TEACHER,
+      school: school?._id
+        ? { _id: String(school._id), schoolName: String(school.schoolName ?? "") }
+        : undefined,
+      teachSubject: teachSubject?._id
+        ? {
+            _id: String(teachSubject._id),
+            subName: String(teachSubject.subName ?? ""),
+            sessions: teachSubject.sessions ? String(teachSubject.sessions) : undefined,
+          }
+        : undefined,
+      teachSclass: teachSclass?._id
+        ? { _id: String(teachSclass._id), sclassName: String(teachSclass.sclassName ?? "") }
+        : undefined,
+    };
+  }
+
+  const sclassName = data.sclassName as ApiUser | undefined;
+  const school = data.school as ApiUser | undefined;
   return {
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    schoolName: user.schoolName,
-  };
-}
-
-function mapTeacherUser(teacher: TeacherLoginResponse): AuthUser {
-  return {
-    _id: teacher._id,
-    name: teacher.name,
-    email: teacher.email,
-    role: UserRole.TEACHER,
-    school: teacher.school,
-    teachSubject: teacher.teachSubject,
-    teachSclass: teacher.teachSclass,
-  };
-}
-
-function mapStudentUser(student: StudentLoginResponse): AuthUser {
-  return {
-    _id: student._id,
-    name: student.name,
+    _id: String(data._id),
+    name: String(data.name),
     role: UserRole.STUDENT,
-    rollNum: student.rollNum,
-    school: student.school,
-    sclassName: student.sclassName,
+    rollNum: Number(data.rollNum ?? 0),
+    school: school?._id
+      ? { _id: String(school._id), schoolName: String(school.schoolName ?? "") }
+      : undefined,
+    sclassName: sclassName?._id
+      ? { _id: String(sclassName._id), sclassName: String(sclassName.sclassName ?? "") }
+      : undefined,
+    examResult: (data.examResult as unknown[]) ?? [],
+    attendance: (data.attendance as unknown[]) ?? [],
   };
 }
 
@@ -66,44 +76,35 @@ export async function login(
   const { role, email, password, rollNum, studentName } = credentials;
 
   if (role === UserRole.ADMIN) {
-    const response = await client.post<LoginResponse>("/AdminLogin", {
-      email,
-      password,
-    });
+    const response = await client.post<LoginResponse>("/AdminLogin", { email, password });
     return {
-      user: mapAdminUser(response.data.user),
+      user: mapApiUserToAuthUser(response.data.user as unknown as ApiUser),
       token: response.data.token,
     };
   }
 
   if (role === UserRole.TEACHER) {
-    const response = await client.post<TeacherLoginResponse>("/TeacherLogin", {
-      email,
-      password,
-    });
-    if (response.data.message) {
-      throw new Error(response.data.message);
-    }
-    return { user: mapTeacherUser(response.data) };
+    const response = await client.post<AuthApiResponse>("/TeacherLogin", { email, password });
+    return {
+      user: mapApiUserToAuthUser(response.data.user),
+      token: response.data.token,
+    };
   }
 
-  const response = await client.post<StudentLoginResponse>("/StudentLogin", {
+  const response = await client.post<AuthApiResponse>("/StudentLogin", {
     rollNum: Number(rollNum),
     studentName,
     password,
   });
-  if (response.data.message) {
-    throw new Error(response.data.message);
-  }
-  return { user: mapStudentUser(response.data) };
+  return {
+    user: mapApiUserToAuthUser(response.data.user),
+    token: response.data.token,
+  };
 }
 
 export async function getMe(): Promise<AuthUser> {
-  const response = await client.get<AuthUser>("/Me");
-  return {
-    ...response.data,
-    role: UserRole.ADMIN,
-  };
+  const response = await client.get<ApiUser>("/Me");
+  return mapApiUserToAuthUser(response.data);
 }
 
 export async function logoutApi(): Promise<void> {
