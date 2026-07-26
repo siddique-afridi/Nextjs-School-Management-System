@@ -90,12 +90,17 @@ export default function ConversationPage() {
   const [showConversationList, setShowConversationList] = useState(true);
 
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior,
-    });
+  const container = messagesContainerRef.current;
 
-    setShowNewMessages(false);
-  };
+  if (!container) return;
+
+  container.scrollTo({
+    top: container.scrollHeight,
+    behavior,
+  });
+
+  setShowNewMessages(false);
+};
 
   const handleMessagesScroll = () => {
     const container = messagesContainerRef.current;
@@ -370,7 +375,11 @@ export default function ConversationPage() {
         </header>
 
         {/* ONLY messages scroll */}
-        <div className="min-h-0 flex-1 overflow-y-auto bg-background p-4 md:p-6">
+        <div
+          ref={messagesContainerRef}
+          onScroll={handleMessagesScroll}
+          className="min-h-0 flex-1 overflow-y-auto bg-background p-4 md:p-6"
+        >
           <div className="mx-auto flex max-w-4xl flex-col gap-4">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-32 text-center">
@@ -385,9 +394,10 @@ export default function ConversationPage() {
                 </p>
               </div>
             ) : (
-              messages.map((message) => (
+              messages.map((message,index) => (
                 <div
                   key={message.id}
+                  //  ref={index === messages.length - 1 ? messagesEndRef : undefined}
                   className={`flex items-end gap-2 ${
                     message.isMine ? "justify-end" : "justify-start"
                   }`}
