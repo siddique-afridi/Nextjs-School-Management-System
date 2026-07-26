@@ -10,6 +10,10 @@ import connectDB from "./config/db.js";
 import limiter from "./middleware/rateLimiter.js";
 import Routes from "./routes/routes.js";
 import "./config/passport.js";
+import http from "http";
+import { Server } from "socket.io";
+import chatSocket from "./socket/chatSocket.js";
+import jwt from 'jsonwebtoken'
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV || "development"}`
@@ -69,8 +73,52 @@ app.use("/api", Routes);
 const UPLOADS_PATH = path.join(__dirname, "uploads");
 app.use("/uploads", express.static(UPLOADS_PATH));
 
+
+// http Server
+const httpServer = http.createServer(app);
+
+// sockets server
+const io = new Server(httpServer, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+  },
+});
+
+// middleware for socket connection
+io.use((socket, next) => {
+  try {
+    const token = socket.handshake.headers.cookie
+      ?.split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
+
+    if (!token) {
+      return next(new Error("Unauthorized"));
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET,
+    );
+
+    socket.user = decoded;
+
+    next();
+  } catch (error) {
+    next(new Error("Invalid or expired token"));
+  }
+});
+
+chatSocket(io);
+
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, "0.0.0.0", () => {
+
+httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log("Environment:", process.env.NODE_ENV || "development");
+  console.log(
+    "Environment:",
+    process.env.NODE_ENV || "development"
+  );
 });

@@ -65,6 +65,12 @@ import {
 } from "../middleware/portalGuards.js";
 import logout from "../controllers/logout.js";
 import me from "../controllers/meController.js";
+import {
+  getMyClassConversation,
+  createClassConversation,
+} from "../controllers/conversationController.js";
+import { getConversationMessages } from "../controllers/messageController.js";
+
 
 const router = Router();
 
@@ -97,10 +103,30 @@ router.put(
   ensureTeacherOwnsStudent,
   studentAttendance
 );
-router.put("/RemoveAllStudentsSubAtten/:id", verify_Token, authorizeRoles("Admin"), clearAllStudentsAttendanceBySubject);
-router.put("/RemoveAllStudentsAtten/:id", verify_Token, authorizeRoles("Admin"), clearAllStudentsAttendance);
-router.put("/RemoveStudentSubAtten/:id", verify_Token, authorizeRoles("Admin"), removeStudentAttendanceBySubject);
-router.put("/RemoveStudentAtten/:id", verify_Token, authorizeRoles("Admin"), removeStudentAttendance);
+router.put(
+  "/RemoveAllStudentsSubAtten/:id",
+  verify_Token,
+  authorizeRoles("Admin"),
+  clearAllStudentsAttendanceBySubject
+);
+router.put(
+  "/RemoveAllStudentsAtten/:id",
+  verify_Token,
+  authorizeRoles("Admin"),
+  clearAllStudentsAttendance
+);
+router.put(
+  "/RemoveStudentSubAtten/:id",
+  verify_Token,
+  authorizeRoles("Admin"),
+  removeStudentAttendanceBySubject
+);
+router.put(
+  "/RemoveStudentAtten/:id",
+  verify_Token,
+  authorizeRoles("Admin"),
+  removeStudentAttendance
+);
 
 router.post("/TeacherReg", verify_Token, authorizeRoles("Admin"), teacherRegister);
 router.post("/TeacherLogin", teacherLogIn);
@@ -116,7 +142,12 @@ router.delete("/Teachers/:id", verify_Token, authorizeRoles("Admin"), deleteTeac
 router.delete("/TeachersClass/:id", verify_Token, authorizeRoles("Admin"), deleteTeachersByClass);
 router.delete("/Teacher/:id", verify_Token, authorizeRoles("Admin"), deleteTeacher);
 router.put("/TeacherSubject", verify_Token, authorizeRoles("Admin"), updateTeacherSubject);
-router.post("/TeacherAttendance/:id", verify_Token, authorizeRoles("Admin", "Teacher"), teacherAttendance);
+router.post(
+  "/TeacherAttendance/:id",
+  verify_Token,
+  authorizeRoles("Admin", "Teacher"),
+  teacherAttendance
+);
 
 router.post("/NoticeCreate", verify_Token, authorizeRoles("Admin"), noticeCreate);
 router.get(
@@ -155,5 +186,13 @@ router.get("/Subject/:id", verify_Token, authorizeRoles("Admin"), getSubjectDeta
 router.delete("/Subject/:id", verify_Token, authorizeRoles("Admin"), deleteSubject);
 router.delete("/Subjects/:id", verify_Token, authorizeRoles("Admin"), deleteSubjects);
 router.delete("/SubjectsClass/:id", verify_Token, authorizeRoles("Admin"), deleteSubjectsByClass);
+
+router.post("/createClassConversation", createClassConversation);
+router.get("/myClassConversation",verify_Token, getMyClassConversation);
+
+router.get(
+  "/messages/conversation/:conversationId",verify_Token,
+  getConversationMessages
+);
 
 export default router;
