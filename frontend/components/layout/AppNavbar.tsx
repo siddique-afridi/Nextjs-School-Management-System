@@ -36,27 +36,17 @@ export function AppNavbar({ onMenuClick }: AppNavbarProps) {
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-2">
             <img
-              src={
-                user?.avatar ||
-                "https://api.dicebear.com/7.x/avataaars/svg?seed=User"
-              }
+              src={user?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=User"}
               alt={user?.name || "User"}
               className="h-8 w-8 rounded-full"
             />
             <div className="text-sm">
               <p className="font-medium text-foreground">{user?.name}</p>
-              <p className="text-xs text-muted-foreground capitalize">
-                {user?.role}
-              </p>
+              <p className="text-xs text-muted-foreground capitalize">{user?.role}</p>
             </div>
           </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleLogout}
-            className="gap-2"
-          >
+          <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-2">
             <LogOut className="h-4 w-4" />
             <span className="hidden sm:inline">Logout</span>
           </Button>

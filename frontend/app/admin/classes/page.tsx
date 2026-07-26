@@ -9,11 +9,8 @@ import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 import { Class } from "@/lib/constants";
 import { Plus, Trash2 } from "lucide-react";
 import { useSchoolId } from "@/hooks/useSchoolId";
-import {
-  createClass,
-  deleteClass,
-  fetchClasses,
-} from "@/app/services/class.service";
+import { createClass, deleteClass, fetchClasses } from "@/app/services/class.service";
+import { createClassConversation } from "@/app/services/conversation.service";
 
 export default function ClassesPage() {
   const schoolId = useSchoolId();
@@ -45,15 +42,19 @@ export default function ClassesPage() {
   }, [schoolId]);
 
   const filteredClasses = useMemo(() => {
-    return classes.filter((cls) =>
-      cls.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return classes.filter((cls) => cls.name.toLowerCase().includes(searchQuery.toLowerCase()));
   }, [classes, searchQuery]);
 
   const handleAddClass = async (formData: Record<string, string>) => {
     try {
       const created = await createClass(schoolId, formData.name);
+
+      if (formData.createGroup === "true") {
+        await createClassConversation(created.id);
+      }
+
       setClasses((prev) => [...prev, created]);
+
       setIsFormOpen(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create class");
@@ -122,9 +123,7 @@ export default function ClassesPage() {
         submitLabel="Add Class"
       >
         <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
-            Class Name
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-2">Class Name</label>
           <input
             type="text"
             name="name"
@@ -132,6 +131,25 @@ export default function ClassesPage() {
             required
             className="w-full rounded-lg border border-input bg-background px-4 py-2"
           />
+        </div>
+        <div className="flex items-start gap-3 rounded-lg border border-border bg-muted/30 p-4">
+          <input
+            type="checkbox"
+            name="createGroup"
+            value="true"
+            defaultChecked
+            className="mt-1 h-4 w-4 rounded border-input"
+          />
+
+          <div>
+            <label htmlFor="createGroup" className="text-sm font-medium text-foreground">
+              Create class group
+            </label>
+
+            <p className="mt-1 text-xs text-muted-foreground">
+              Students in this class will be able to chat with each other in a private class group.
+            </p>
+          </div>
         </div>
       </FormDialog>
 

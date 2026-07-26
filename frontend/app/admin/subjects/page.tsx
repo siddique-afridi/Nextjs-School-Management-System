@@ -10,11 +10,7 @@ import { Subject } from "@/lib/constants";
 import { Plus, Trash2 } from "lucide-react";
 import { useSchoolId } from "@/hooks/useSchoolId";
 import { fetchClasses } from "@/app/services/class.service";
-import {
-  createSubject,
-  deleteSubject,
-  fetchSubjects,
-} from "@/app/services/subject.service";
+import { createSubject, deleteSubject, fetchSubjects } from "@/app/services/subject.service";
 import { Class } from "@/lib/constants";
 
 export default function SubjectsPage() {
@@ -53,7 +49,7 @@ export default function SubjectsPage() {
     return subjects.filter(
       (s) =>
         s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        s.code.toLowerCase().includes(searchQuery.toLowerCase())
+        s.code.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [subjects, searchQuery]);
 
@@ -111,7 +107,11 @@ export default function SubjectsPage() {
           <h1 className="text-3xl font-bold text-foreground">Subjects</h1>
           <p className="mt-1 text-muted-foreground">Manage all subjects</p>
         </div>
-        <Button onClick={() => setIsFormOpen(true)} className="gap-2" disabled={classes.length === 0}>
+        <Button
+          onClick={() => setIsFormOpen(true)}
+          className="gap-2"
+          disabled={classes.length === 0}
+        >
           <Plus className="h-4 w-4" />
           Add Subject
         </Button>
@@ -142,7 +142,9 @@ export default function SubjectsPage() {
           <select name="classId" required className="w-full rounded-lg border px-4 py-2">
             <option value="">Select class</option>
             {classes.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
         </div>
@@ -156,7 +158,13 @@ export default function SubjectsPage() {
         </div>
         <div>
           <label className="block text-sm font-medium mb-2">Sessions</label>
-          <input type="number" name="sessions" defaultValue="30" required className="w-full rounded-lg border px-4 py-2" />
+          <input
+            type="number"
+            name="sessions"
+            defaultValue="30"
+            required
+            className="w-full rounded-lg border px-4 py-2"
+          />
         </div>
       </FormDialog>
 
@@ -165,7 +173,10 @@ export default function SubjectsPage() {
         title="Delete Subject"
         description={`Delete ${selectedSubject?.name}?`}
         onConfirm={handleDeleteSubject}
-        onCancel={() => { setIsDeleteOpen(false); setSelectedSubject(null); }}
+        onCancel={() => {
+          setIsDeleteOpen(false);
+          setSelectedSubject(null);
+        }}
       />
     </div>
   );

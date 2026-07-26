@@ -10,6 +10,7 @@ import {
   MessageSquare,
   User,
   X,
+  MessageCircle,
 } from "lucide-react";
 
 interface StudentSidebarProps {
@@ -24,6 +25,7 @@ const navItems = [
   { href: "/student/notices", label: "Notices", icon: Bell },
   { href: "/student/complaints", label: "Complaints", icon: MessageSquare },
   { href: "/student/profile", label: "Profile", icon: User },
+  { href: "/student/conversation", label: "Messaging", icon: MessageCircle },
 ];
 
 export function StudentSidebar({ isOpen = true, onClose }: StudentSidebarProps) {
@@ -32,12 +34,7 @@ export function StudentSidebar({ isOpen = true, onClose }: StudentSidebarProps) 
   return (
     <>
       {/* Mobile overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
-          onClick={onClose}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside

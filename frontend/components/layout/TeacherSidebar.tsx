@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Users,
-  Clock,
-  User,
-  X,
-} from "lucide-react";
+import { LayoutDashboard, Users, Clock, User, X } from "lucide-react";
 
 interface TeacherSidebarProps {
   isOpen?: boolean;
@@ -28,12 +22,7 @@ export function TeacherSidebar({ isOpen = true, onClose }: TeacherSidebarProps) 
   return (
     <>
       {/* Mobile overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
-          onClick={onClose}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside

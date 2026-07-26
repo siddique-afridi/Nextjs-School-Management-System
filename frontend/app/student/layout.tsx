@@ -7,11 +7,7 @@ import { AppNavbar } from "@/components/layout/AppNavbar";
 import { useAuth } from "@/app/context/userContext";
 import { UserRole } from "@/lib/constants";
 
-export default function StudentLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const { user, isLoading } = useAuth();
@@ -32,14 +28,11 @@ export default function StudentLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col">
       <AppNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex flex-1 overflow-hidden">
-        <StudentSidebar
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-        />
-        <main className="flex-1 overflow-auto">
+        <StudentSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <main className="flex-1 overflow-y-auto">
           <div className="p-4 md:p-6">{children}</div>
         </main>
       </div>

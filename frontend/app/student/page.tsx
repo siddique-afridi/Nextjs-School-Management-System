@@ -31,8 +31,10 @@ export default function StudentDashboard() {
       setAttendancePct(attendance.length ? Math.round((present / attendance.length) * 100) : 0);
       setAvgMarks(
         results.length
-          ? Math.round(results.reduce((s, r) => s + (r.marks / r.totalMarks) * 100, 0) / results.length)
-          : 0
+          ? Math.round(
+              results.reduce((s, r) => s + (r.marks / r.totalMarks) * 100, 0) / results.length,
+            )
+          : 0,
       );
     });
 
@@ -54,14 +56,32 @@ export default function StudentDashboard() {
       </div>
 
       <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
-        <Link href="/student/attendance"><Button variant="outline" className="w-full">Attendance</Button></Link>
-        <Link href="/student/results"><Button variant="outline" className="w-full">Results</Button></Link>
-        <Link href="/student/notices"><Button variant="outline" className="w-full">Notices</Button></Link>
-        <Link href="/student/complaints"><Button variant="outline" className="w-full">Complaints</Button></Link>
+        <Link href="/student/attendance">
+          <Button variant="outline" className="w-full">
+            Attendance
+          </Button>
+        </Link>
+        <Link href="/student/results">
+          <Button variant="outline" className="w-full">
+            Results
+          </Button>
+        </Link>
+        <Link href="/student/notices">
+          <Button variant="outline" className="w-full">
+            Notices
+          </Button>
+        </Link>
+        <Link href="/student/complaints">
+          <Button variant="outline" className="w-full">
+            Complaints
+          </Button>
+        </Link>
       </div>
 
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-        {notices.slice(0, 2).map((n) => <NoticeCard key={n.id} notice={n} />)}
+        {notices.slice(0, 2).map((n) => (
+          <NoticeCard key={n.id} notice={n} />
+        ))}
       </div>
     </div>
   );

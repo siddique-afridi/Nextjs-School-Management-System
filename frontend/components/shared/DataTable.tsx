@@ -58,9 +58,7 @@ export function DataTable<T extends { id?: string | number }>({
                 className={`px-4 py-3 text-left text-sm font-semibold text-foreground ${
                   column.sortable ? "cursor-pointer hover:bg-muted" : ""
                 } ${column.width || ""}`}
-                onClick={() =>
-                  column.sortable && handleSort(column.key)
-                }
+                onClick={() => column.sortable && handleSort(column.key)}
               >
                 <div className="flex items-center gap-2">
                   {column.label}
@@ -88,10 +86,7 @@ export function DataTable<T extends { id?: string | number }>({
               onClick={() => onRowClick?.(item)}
             >
               {columns.map((column) => (
-                <td
-                  key={String(column.key)}
-                  className="px-4 py-3 text-sm text-foreground"
-                >
+                <td key={String(column.key)} className="px-4 py-3 text-sm text-foreground">
                   {column.render
                     ? column.render(item[column.key], item)
                     : String(item[column.key] || "-")}

@@ -58,8 +58,20 @@ export default function ComplaintsPage() {
         onSubmit={handleSubmit}
         submitLabel="Submit"
       >
-        <input type="text" name="title" placeholder="Title" required className="w-full border rounded-lg px-4 py-2" />
-        <textarea name="description" placeholder="Details" rows={4} required className="w-full border rounded-lg px-4 py-2" />
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          required
+          className="w-full border rounded-lg px-4 py-2"
+        />
+        <textarea
+          name="description"
+          placeholder="Details"
+          rows={4}
+          required
+          className="w-full border rounded-lg px-4 py-2"
+        />
       </FormDialog>
     </div>
   );

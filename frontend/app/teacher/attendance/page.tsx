@@ -26,7 +26,9 @@ export default function AttendancePage() {
       .then((list) => {
         setStudents(list);
         const defaults: Record<string, "Present" | "Absent"> = {};
-        list.forEach((s) => { defaults[s.id] = "Present"; });
+        list.forEach((s) => {
+          defaults[s.id] = "Present";
+        });
         setAttendance(defaults);
       })
       .finally(() => setLoading(false));
@@ -51,8 +53,8 @@ export default function AttendancePage() {
             subjectId,
             status: attendance[s.id] ?? "Present",
             date,
-          })
-        )
+          }),
+        ),
       );
       setMessage("Attendance submitted successfully!");
     } catch {
@@ -110,7 +112,9 @@ export default function AttendancePage() {
             ))}
           </div>
 
-          <Button type="submit" className="w-full">Submit Attendance</Button>
+          <Button type="submit" className="w-full">
+            Submit Attendance
+          </Button>
           {message && <p className="text-green-600 text-sm">{message}</p>}
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </form>

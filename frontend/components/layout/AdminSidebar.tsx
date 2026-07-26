@@ -32,7 +32,6 @@ export function AdminSidebar({ isOpen = true, onClose }: AdminSidebarProps) {
 
   return (
     <>
-
       {/* Sidebar */}
       <aside
         className={`fixed z-20 w-64 border-r border-border bg-sidebar transition-transform duration-300 md:relative md:translate-x-0 ${

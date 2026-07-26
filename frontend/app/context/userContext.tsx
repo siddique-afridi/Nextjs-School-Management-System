@@ -70,7 +70,7 @@ export function UserProvider({ children }: UserProviderProps) {
       logout,
       setUser,
     }),
-    [user, isLoading, login, logout]
+    [user, isLoading, login, logout],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

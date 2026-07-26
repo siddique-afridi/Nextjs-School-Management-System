@@ -7,11 +7,7 @@ import { AppNavbar } from "@/components/layout/AppNavbar";
 import { useAuth } from "@/app/context/userContext";
 import { UserRole } from "@/lib/constants";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const { user, isLoading } = useAuth();
@@ -33,20 +29,15 @@ export default function AdminLayout({
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-  <AppNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <AppNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 
-  <div className="flex flex-1 overflow-hidden">
-    <AdminSidebar
-      isOpen={sidebarOpen}
-      onClose={() => setSidebarOpen(false)}
-    />
+      <div className="flex flex-1 overflow-hidden">
+        <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-    <main className="flex-1 overflow-y-auto">
-      <div className="p-4 md:p-6">
-        {children}
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-4 md:p-6">{children}</div>
+        </main>
       </div>
-    </main>
-  </div>
-</div>
+    </div>
   );
 }

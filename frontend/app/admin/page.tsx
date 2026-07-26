@@ -94,7 +94,11 @@ export default function AdminDashboard() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold">Recent Notices</h2>
-          <Link href="/admin/notices"><Button variant="ghost" size="sm">View All</Button></Link>
+          <Link href="/admin/notices">
+            <Button variant="ghost" size="sm">
+              View All
+            </Button>
+          </Link>
         </div>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {notices.slice(0, 3).map((notice) => (
@@ -107,7 +111,11 @@ export default function AdminDashboard() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold">Recent Complaints</h2>
-          <Link href="/admin/complaints"><Button variant="ghost" size="sm">View All</Button></Link>
+          <Link href="/admin/complaints">
+            <Button variant="ghost" size="sm">
+              View All
+            </Button>
+          </Link>
         </div>
         {complaints.length === 0 ? (
           <p className="text-muted-foreground text-sm">No complaints yet.</p>

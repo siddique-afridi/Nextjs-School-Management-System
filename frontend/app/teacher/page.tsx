@@ -22,7 +22,12 @@ export default function TeacherDashboard() {
   }, [classId]);
 
   const stats = [
-    { title: "Students in Class", value: studentCount, icon: GraduationCap, description: "Active students" },
+    {
+      title: "Students in Class",
+      value: studentCount,
+      icon: GraduationCap,
+      description: "Active students",
+    },
     { title: "Subject", value: subjectName, icon: BookOpen, description: "Assigned subject" },
     { title: "Class", value: className, icon: Users, description: "Assigned class" },
     { title: "Attendance", value: "Mark", icon: Clock, description: "Use attendance page" },
@@ -42,9 +47,19 @@ export default function TeacherDashboard() {
       </div>
 
       <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
-        <Link href="/teacher/attendance"><Button className="w-full">Mark Attendance</Button></Link>
-        <Link href="/teacher/my-class"><Button variant="outline" className="w-full">View My Class</Button></Link>
-        <Link href="/teacher/profile"><Button variant="outline" className="w-full">View Profile</Button></Link>
+        <Link href="/teacher/attendance">
+          <Button className="w-full">Mark Attendance</Button>
+        </Link>
+        <Link href="/teacher/my-class">
+          <Button variant="outline" className="w-full">
+            View My Class
+          </Button>
+        </Link>
+        <Link href="/teacher/profile">
+          <Button variant="outline" className="w-full">
+            View Profile
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -31,10 +31,7 @@ export function mapSubject(raw: Record<string, unknown>): Subject {
       : undefined,
     // extra info for forms
     classId: typeof sclass === "object" && sclass?._id ? String(sclass._id) : String(sclass ?? ""),
-    className:
-      typeof sclass === "object" && sclass?.sclassName
-        ? String(sclass.sclassName)
-        : "",
+    className: typeof sclass === "object" && sclass?.sclassName ? String(sclass.sclassName) : "",
     sessions: String(raw.sessions ?? ""),
   } as Subject & { classId?: string; className?: string; sessions?: string };
 }

@@ -1,4 +1,3 @@
-
 import { defineConfig, globalIgnores } from "eslint/config";
 import js from "@eslint/js";
 import globals from "globals";
@@ -8,14 +7,7 @@ import prettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
 
 export default defineConfig([
-  globalIgnores([
-    ".next/**",
-    "out/**",
-    "build/**",
-    "dist/**",
-    "coverage/**",
-    "node_modules/**"
-  ]),
+  globalIgnores([".next/**", "out/**", "build/**", "dist/**", "coverage/**", "node_modules/**"]),
 
   js.configs.recommended,
 
@@ -31,12 +23,12 @@ export default defineConfig([
 
       globals: {
         ...globals.browser,
-        ...globals.node
-      }
+        ...globals.node,
+      },
     },
 
     plugins: {
-      prettier: prettierPlugin
+      prettier: prettierPlugin,
     },
 
     rules: {
@@ -46,8 +38,8 @@ export default defineConfig([
         "warn",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_"
-        }
+          varsIgnorePattern: "^_",
+        },
       ],
 
       "prefer-const": "error",
@@ -56,9 +48,9 @@ export default defineConfig([
 
       eqeqeq: ["error", "always"],
 
-      "no-console": "off"
-    }
+      "no-console": "off",
+    },
   },
 
-  prettier
+  prettier,
 ]);

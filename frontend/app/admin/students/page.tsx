@@ -10,11 +10,7 @@ import { Class, Student } from "@/lib/constants";
 import { Plus, Trash2 } from "lucide-react";
 import { useSchoolId } from "@/hooks/useSchoolId";
 import { fetchClasses } from "@/app/services/class.service";
-import {
-  createStudent,
-  deleteStudent,
-  fetchStudents,
-} from "@/app/services/student.service";
+import { createStudent, deleteStudent, fetchStudents } from "@/app/services/student.service";
 
 type StudentRow = Student & { id: string };
 
@@ -54,7 +50,7 @@ export default function StudentsPage() {
     return students.filter(
       (s) =>
         s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        s.studentId.includes(searchQuery)
+        s.studentId.includes(searchQuery),
     );
   }, [students, searchQuery]);
 
@@ -104,7 +100,10 @@ export default function StudentsPage() {
       label: "Actions",
       render: (_, student) => (
         <button
-          onClick={() => { setSelectedStudent(student); setIsDeleteOpen(true); }}
+          onClick={() => {
+            setSelectedStudent(student);
+            setIsDeleteOpen(true);
+          }}
           className="p-1 hover:bg-muted rounded"
         >
           <Trash2 className="h-4 w-4 text-destructive" />
@@ -120,7 +119,11 @@ export default function StudentsPage() {
           <h1 className="text-3xl font-bold text-foreground">Students</h1>
           <p className="mt-1 text-muted-foreground">Manage all students</p>
         </div>
-        <Button onClick={() => setIsFormOpen(true)} className="gap-2" disabled={classes.length === 0}>
+        <Button
+          onClick={() => setIsFormOpen(true)}
+          className="gap-2"
+          disabled={classes.length === 0}
+        >
           <Plus className="h-4 w-4" />
           Add Student
         </Button>
@@ -149,18 +152,31 @@ export default function StudentsPage() {
         </div>
         <div>
           <label className="block text-sm font-medium mb-2">Roll Number</label>
-          <input type="number" name="rollNum" required className="w-full rounded-lg border px-4 py-2" />
+          <input
+            type="number"
+            name="rollNum"
+            required
+            className="w-full rounded-lg border px-4 py-2"
+          />
         </div>
         <div>
           <label className="block text-sm font-medium mb-2">Password</label>
-          <input type="password" name="password" required minLength={4} className="w-full rounded-lg border px-4 py-2" />
+          <input
+            type="password"
+            name="password"
+            required
+            minLength={4}
+            className="w-full rounded-lg border px-4 py-2"
+          />
         </div>
         <div>
           <label className="block text-sm font-medium mb-2">Class</label>
           <select name="classId" required className="w-full rounded-lg border px-4 py-2">
             <option value="">Select class</option>
             {classes.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
         </div>
@@ -171,7 +187,10 @@ export default function StudentsPage() {
         title="Delete Student"
         description={`Delete ${selectedStudent?.name}?`}
         onConfirm={handleDeleteStudent}
-        onCancel={() => { setIsDeleteOpen(false); setSelectedStudent(null); }}
+        onCancel={() => {
+          setIsDeleteOpen(false);
+          setSelectedStudent(null);
+        }}
       />
     </div>
   );

@@ -34,17 +34,11 @@ export function FormDialog({
 
   return (
     <>
-      <div
-        className="fixed inset-0 z-40 bg-black/50"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 z-40 bg-black/50" onClick={onClose} />
       <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-card p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-          <button
-            onClick={onClose}
-            className="p-1 hover:bg-muted rounded transition-colors"
-          >
+          <button onClick={onClose} className="p-1 hover:bg-muted rounded transition-colors">
             <X className="h-5 w-5 text-foreground" />
           </button>
         </div>
@@ -53,16 +47,10 @@ export function FormDialog({
           {children}
 
           <div className="flex gap-2 justify-end pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-            >
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Saving..." : submitLabel}
-            </Button>
+            <Button type="submit">{loading ? "Saving..." : submitLabel}</Button>
           </div>
         </form>
       </div>

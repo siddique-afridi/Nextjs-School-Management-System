@@ -5,6 +5,7 @@ import { DataTable, Column } from "@/components/shared/DataTable";
 import { ExamResult } from "@/lib/constants";
 import { useAuth } from "@/app/context/userContext";
 import { fetchStudentProfile, mapExamResultRows } from "@/app/services/portal/student.portal";
+import SocketTest from "@/components/SocketTest";
 
 export default function ResultsPage() {
   const { user } = useAuth();
@@ -38,6 +39,7 @@ export default function ResultsPage() {
       <div className="rounded-lg border p-6">
         <p className="text-muted-foreground">Average</p>
         <p className="text-3xl font-bold">{avg}%</p>
+        <SocketTest />
       </div>
       <DataTable columns={columns} data={results} />
     </div>

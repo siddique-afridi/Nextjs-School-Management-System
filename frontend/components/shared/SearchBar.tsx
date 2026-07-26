@@ -9,11 +9,7 @@ interface SearchBarProps {
   className?: string;
 }
 
-export function SearchBar({
-  placeholder = "Search...",
-  onSearch,
-  className = "",
-}: SearchBarProps) {
+export function SearchBar({ placeholder = "Search...", onSearch, className = "" }: SearchBarProps) {
   const [query, setQuery] = useState("");
 
   const handleChange = useCallback(
@@ -22,7 +18,7 @@ export function SearchBar({
       setQuery(newQuery);
       onSearch(newQuery);
     },
-    [onSearch]
+    [onSearch],
   );
 
   const handleClear = () => {

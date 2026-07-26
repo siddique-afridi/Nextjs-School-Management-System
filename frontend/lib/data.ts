@@ -1,4 +1,14 @@
-import { UserRole, Class, Subject, Teacher, Student, Notice, Attendance, ExamResult, Complaint } from "./constants";
+import {
+  UserRole,
+  Class,
+  Subject,
+  Teacher,
+  Student,
+  Notice,
+  Attendance,
+  ExamResult,
+  Complaint,
+} from "./constants";
 
 // Mock Subjects
 export const mockSubjects: Subject[] = [
@@ -133,24 +143,42 @@ export const mockNotices: Notice[] = [
   {
     id: "n1",
     title: "Annual Sports Day",
-    content: "The annual sports day will be held on June 15th. All students are requested to participate.",
-    createdBy: { id: "admin1", name: "Admin User", email: "admin@school.com", role: UserRole.ADMIN },
+    content:
+      "The annual sports day will be held on June 15th. All students are requested to participate.",
+    createdBy: {
+      id: "admin1",
+      name: "Admin User",
+      email: "admin@school.com",
+      role: UserRole.ADMIN,
+    },
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     expiresAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
   },
   {
     id: "n2",
     title: "Summer Vacation Schedule",
-    content: "Summer vacation starts from June 1st and ends on July 31st. Classes will resume on August 1st.",
-    createdBy: { id: "admin1", name: "Admin User", email: "admin@school.com", role: UserRole.ADMIN },
+    content:
+      "Summer vacation starts from June 1st and ends on July 31st. Classes will resume on August 1st.",
+    createdBy: {
+      id: "admin1",
+      name: "Admin User",
+      email: "admin@school.com",
+      role: UserRole.ADMIN,
+    },
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
     expiresAt: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
   },
   {
     id: "n3",
     title: "Parent-Teacher Meeting",
-    content: "The parent-teacher meeting will be held on May 20th in the school auditorium. Parents are requested to attend.",
-    createdBy: { id: "admin1", name: "Admin User", email: "admin@school.com", role: UserRole.ADMIN },
+    content:
+      "The parent-teacher meeting will be held on May 20th in the school auditorium. Parents are requested to attend.",
+    createdBy: {
+      id: "admin1",
+      name: "Admin User",
+      email: "admin@school.com",
+      role: UserRole.ADMIN,
+    },
     createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
   },
@@ -246,7 +274,8 @@ export const mockComplaints: Complaint[] = [
     id: "comp2",
     student: mockStudents[1],
     title: "Canteen Food Quality",
-    description: "The food quality in the canteen has deteriorated recently. Please address this issue.",
+    description:
+      "The food quality in the canteen has deteriorated recently. Please address this issue.",
     status: "pending",
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
   },

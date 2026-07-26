@@ -26,9 +26,7 @@ export function NoticeCard({ notice, onClick }: NoticeCardProps) {
         </div>
         <div className="flex-1">
           <h3 className="font-semibold text-foreground">{notice.title}</h3>
-          <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-            {notice.content}
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{notice.content}</p>
           <p className="mt-2 text-xs text-muted-foreground">{formattedDate}</p>
         </div>
       </div>

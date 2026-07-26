@@ -11,22 +11,14 @@ interface StatCardProps {
   };
 }
 
-export function StatCard({
-  title,
-  value,
-  icon: Icon,
-  description,
-  trend,
-}: StatCardProps) {
+export function StatCard({ title, value, icon: Icon, description, trend }: StatCardProps) {
   return (
     <div className="rounded-lg border border-border bg-card p-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
           <p className="mt-2 text-3xl font-bold text-foreground">{value}</p>
-          {description && (
-            <p className="mt-1 text-xs text-muted-foreground">{description}</p>
-          )}
+          {description && <p className="mt-1 text-xs text-muted-foreground">{description}</p>}
           {trend && (
             <p
               className={`mt-1 text-xs font-medium ${

@@ -32,7 +32,13 @@ export function mapAttendanceRows(raw: RawRecord[]): Attendance[] {
     const status = String(item.status ?? "Absent").toLowerCase() as "present" | "absent";
     return {
       id: `${index}-${String(item.date)}`,
-      student: { _id: "", name: "", role: "Student" as never, studentId: "", class: { id: "", name: "" } },
+      student: {
+        _id: "",
+        name: "",
+        role: "Student" as never,
+        studentId: "",
+        class: { id: "", name: "" },
+      },
       date: new Date(String(item.date)),
       status,
       subject: {
@@ -53,7 +59,13 @@ export function mapExamResultRows(raw: RawRecord[]): ExamResult[] {
     const totalMarks = 100;
     return {
       id: String(subject?._id ?? index),
-      student: { _id: "", name: "", role: "Student" as never, studentId: "", class: { id: "", name: "" } },
+      student: {
+        _id: "",
+        name: "",
+        role: "Student" as never,
+        studentId: "",
+        class: { id: "", name: "" },
+      },
       subject: {
         id: String(subject?._id ?? ""),
         name: String(subject?.subName ?? "Subject"),

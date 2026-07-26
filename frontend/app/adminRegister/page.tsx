@@ -4,16 +4,13 @@ import React from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  AdminRegisterForm,
-  adminRegisterSchema,
-} from "../schemas/adminRegisterSchema";
+import { AdminRegisterForm, adminRegisterSchema } from "../schemas/adminRegisterSchema";
 import client from "@/lib/client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 function page() {
-  const router = useRouter()
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -25,19 +22,16 @@ function page() {
   });
 
   const onSubmit = async (data: AdminRegisterForm) => {
-    
     try {
-
       const res = await client.post("/AdminReg", data);
       router.push("/login");
-      console.log(res.data)
-
-    } catch (error:any) {
+      console.log(res.data);
+    } catch (error: any) {
       const field = error.response.data.field;
-       setError(field, {
-      type: "server",
-      message: error.response.data.message,
-    })
+      setError(field, {
+        type: "server",
+        message: error.response.data.message,
+      });
     }
   };
 
@@ -46,9 +40,7 @@ function page() {
       {/* Left Side */}
       <div className="flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold text-slate-800 mb-3">
-            Admin Register
-          </h1>
+          <h1 className="text-3xl font-bold text-slate-800 mb-3">Admin Register</h1>
 
           <p className="text-gray-600 mb-8">
             Create your own school by registering as an admin.
@@ -58,34 +50,24 @@ function page() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label className="block mb-2 text-sm font-medium">
-                Full Name
-              </label>
+              <label className="block mb-2 text-sm font-medium">Full Name</label>
               <input
                 placeholder="Enter your name"
                 {...register("name")}
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-violet-600"
               />
-              {errors.name && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.name.message}
-                </p>
-              )}
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
             </div>
 
             <div>
-              <label className="block mb-2 text-sm font-medium">
-                School Name
-              </label>
+              <label className="block mb-2 text-sm font-medium">School Name</label>
               <input
                 placeholder="Enter school name"
                 {...register("schoolName")}
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-violet-600"
               />
               {errors.schoolName && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.schoolName.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.schoolName.message}</p>
               )}
             </div>
 
@@ -97,11 +79,7 @@ function page() {
                 {...register("email")}
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-violet-600"
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.email.message}
-                </p>
-              )}
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
 
             <div>
@@ -124,14 +102,10 @@ function page() {
               </div>
 
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
               )}
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
 
@@ -151,10 +125,7 @@ function page() {
 
             <p className="text-center text-sm text-gray-600">
               Already have an account?{" "}
-              <Link
-                href="/login"
-                className="text-violet-600 font-medium hover:underline"
-              >
+              <Link href="/login" className="text-violet-600 font-medium hover:underline">
                 Log in
               </Link>
             </p>

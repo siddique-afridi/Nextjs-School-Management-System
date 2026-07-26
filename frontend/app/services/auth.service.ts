@@ -1,10 +1,5 @@
 import client from "@/lib/client";
-import {
-  AuthUser,
-  LoginCredentials,
-  LoginResponse,
-  UserRole,
-} from "@/lib/constants";
+import { AuthUser, LoginCredentials, LoginResponse, UserRole } from "@/lib/constants";
 
 type ApiUser = Record<string, unknown>;
 
@@ -71,7 +66,7 @@ export function mapApiUserToAuthUser(data: ApiUser): AuthUser {
 }
 
 export async function login(
-  credentials: LoginCredentials
+  credentials: LoginCredentials,
 ): Promise<{ user: AuthUser; token?: string }> {
   const { role, email, password, rollNum, studentName } = credentials;
 

@@ -7,11 +7,7 @@ import { AppNavbar } from "@/components/layout/AppNavbar";
 import { useAuth } from "@/app/context/userContext";
 import { UserRole } from "@/lib/constants";
 
-export default function TeacherLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function TeacherLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const { user, isLoading } = useAuth();
@@ -35,10 +31,7 @@ export default function TeacherLayout({
     <div className="flex min-h-screen flex-col">
       <AppNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex flex-1 overflow-hidden">
-        <TeacherSidebar
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-        />
+        <TeacherSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="flex-1 overflow-auto">
           <div className="p-4 md:p-6">{children}</div>
         </main>

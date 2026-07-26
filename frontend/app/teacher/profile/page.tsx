@@ -13,11 +13,21 @@ export default function TeacherProfilePage() {
       </div>
 
       <div className="rounded-lg border bg-card p-6 space-y-4">
-        <p><span className="text-muted-foreground">Name:</span> {user?.name}</p>
-        <p><span className="text-muted-foreground">Email:</span> {user?.email}</p>
-        <p><span className="text-muted-foreground">School:</span> {user?.school?.schoolName}</p>
-        <p><span className="text-muted-foreground">Class:</span> {user?.teachSclass?.sclassName}</p>
-        <p><span className="text-muted-foreground">Subject:</span> {user?.teachSubject?.subName}</p>
+        <p>
+          <span className="text-muted-foreground">Name:</span> {user?.name}
+        </p>
+        <p>
+          <span className="text-muted-foreground">Email:</span> {user?.email}
+        </p>
+        <p>
+          <span className="text-muted-foreground">School:</span> {user?.school?.schoolName}
+        </p>
+        <p>
+          <span className="text-muted-foreground">Class:</span> {user?.teachSclass?.sclassName}
+        </p>
+        <p>
+          <span className="text-muted-foreground">Subject:</span> {user?.teachSubject?.subName}
+        </p>
       </div>
     </div>
   );

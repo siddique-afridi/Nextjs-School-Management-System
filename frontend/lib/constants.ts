@@ -126,14 +126,14 @@ export interface DashboardStats {
   totalComplaints: number;
 }
 
-export interface LoginResponse {    
+export interface LoginResponse {
   message: string;
   token: string;
   user: {
-    _id: string;    
+    _id: string;
     name: string;
     email: string;
     schoolName: string;
     role: UserRole;
-  }
+  };
 }

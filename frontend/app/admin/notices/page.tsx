@@ -9,11 +9,7 @@ import { NoticeCard } from "@/components/shared/NoticeCard";
 import { Notice } from "@/lib/constants";
 import { Plus, Trash2 } from "lucide-react";
 import { useSchoolId } from "@/hooks/useSchoolId";
-import {
-  createNotice,
-  deleteNotice,
-  fetchNotices,
-} from "@/app/services/notice.service";
+import { createNotice, deleteNotice, fetchNotices } from "@/app/services/notice.service";
 
 export default function NoticesPage() {
   const schoolId = useSchoolId();
@@ -45,7 +41,7 @@ export default function NoticesPage() {
     return notices.filter(
       (n) =>
         n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        n.content.toLowerCase().includes(searchQuery.toLowerCase())
+        n.content.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [notices, searchQuery]);
 
@@ -98,7 +94,10 @@ export default function NoticesPage() {
               <div key={notice.id} className="relative group">
                 <NoticeCard notice={notice} />
                 <button
-                  onClick={() => { setSelectedNotice(notice); setIsDeleteOpen(true); }}
+                  onClick={() => {
+                    setSelectedNotice(notice);
+                    setIsDeleteOpen(true);
+                  }}
                   className="absolute top-4 right-4 p-1 hover:bg-muted rounded opacity-0 group-hover:opacity-100"
                 >
                   <Trash2 className="h-4 w-4 text-destructive" />
@@ -122,7 +121,12 @@ export default function NoticesPage() {
         </div>
         <div>
           <label className="block text-sm font-medium mb-2">Content</label>
-          <textarea name="content" rows={4} required className="w-full rounded-lg border px-4 py-2" />
+          <textarea
+            name="content"
+            rows={4}
+            required
+            className="w-full rounded-lg border px-4 py-2"
+          />
         </div>
       </FormDialog>
 
@@ -131,7 +135,10 @@ export default function NoticesPage() {
         title="Delete Notice"
         description="Delete this notice?"
         onConfirm={handleDeleteNotice}
-        onCancel={() => { setIsDeleteOpen(false); setSelectedNotice(null); }}
+        onCancel={() => {
+          setIsDeleteOpen(false);
+          setSelectedNotice(null);
+        }}
       />
     </div>
   );

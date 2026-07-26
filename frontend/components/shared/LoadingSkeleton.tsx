@@ -3,18 +3,12 @@ interface LoadingSkeletonProps {
   type?: "card" | "table-row" | "line";
 }
 
-export function LoadingSkeleton({
-  count = 3,
-  type = "card",
-}: LoadingSkeletonProps) {
+export function LoadingSkeleton({ count = 3, type = "card" }: LoadingSkeletonProps) {
   if (type === "card") {
     return (
       <div className="space-y-4">
         {Array.from({ length: count }).map((_, i) => (
-          <div
-            key={i}
-            className="rounded-lg border border-border bg-card p-6 animate-pulse"
-          >
+          <div key={i} className="rounded-lg border border-border bg-card p-6 animate-pulse">
             <div className="flex items-center justify-between">
               <div className="space-y-2 flex-1">
                 <div className="h-4 w-24 bg-muted rounded" />

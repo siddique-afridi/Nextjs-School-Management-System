@@ -10,7 +10,7 @@ export async function fetchClassStudents(classId: string) {
 
 export async function markStudentAttendance(
   studentId: string,
-  data: { subjectId: string; status: "Present" | "Absent"; date: string }
+  data: { subjectId: string; status: "Present" | "Absent"; date: string },
 ) {
   await client.put(`/StudentAttendance/${studentId}`, {
     subName: data.subjectId,

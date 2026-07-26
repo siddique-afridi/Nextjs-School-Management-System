@@ -23,9 +23,9 @@ export default function NoticesPage() {
       notices.filter(
         (n) =>
           n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          n.content.toLowerCase().includes(searchQuery.toLowerCase())
+          n.content.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
-    [notices, searchQuery]
+    [notices, searchQuery],
   );
 
   return (
@@ -33,7 +33,9 @@ export default function NoticesPage() {
       <h1 className="text-3xl font-bold">School Notices</h1>
       <SearchBar placeholder="Search notices..." onSearch={setSearchQuery} />
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((n) => <NoticeCard key={n.id} notice={n} />)}
+        {filtered.map((n) => (
+          <NoticeCard key={n.id} notice={n} />
+        ))}
       </div>
     </div>
   );

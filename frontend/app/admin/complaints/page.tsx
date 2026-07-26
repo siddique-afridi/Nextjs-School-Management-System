@@ -26,7 +26,7 @@ export default function ComplaintsPage() {
     return complaints.filter(
       (c) =>
         c.student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.description.toLowerCase().includes(searchQuery.toLowerCase())
+        c.description.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [complaints, searchQuery]);
 
