@@ -14,3 +14,6 @@ node_modules
 .next/
 .DS_Store
 .env
+
+FULLSTACK_PROGRESS.md
+NEXTJS_LEARNING_NOTES.md

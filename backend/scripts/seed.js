@@ -7,9 +7,10 @@ import connectDB from "../config/db.js";
 import Admin from "../models/Admin.js";
 import Teacher from "../models/Teacher.js";
 import Student from "../models/Students.js";
+import Sclass from "../models/Class.js";
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV || "development"}`
+  path: `.env.${process.env.NODE_ENV || "development"}`,
 });
 
 const createCollectionIfNotExists = async (name) => {
@@ -29,26 +30,25 @@ const seedDatabase = async () => {
 
     console.log("✅ Connected to MongoDB\n");
 
-    // Create collections (optional)
     await createCollectionIfNotExists("admins");
     await createCollectionIfNotExists("teachers");
     await createCollectionIfNotExists("students");
     await createCollectionIfNotExists("classes");
-    await createCollectionIfNotExists("subjects");
-    await createCollectionIfNotExists("notices");
-    await createCollectionIfNotExists("complains");
 
-    // ---------- ADMIN ----------
-    const adminExists = await Admin.findOne({
+    // ==========================
+    // ADMIN
+    // ==========================
+
+    let admin = await Admin.findOne({
       email: "admin@school.com",
     });
 
-    if (!adminExists) {
-      await Admin.create({
+    if (!admin) {
+      admin = await Admin.create({
         name: "Super Admin",
         email: "admin@school.com",
         password: await bcrypt.hash("Admin@123", 10),
-        role: "admin",
+        schoolName: "ABC Public School",
       });
 
       console.log("✅ Admin created");
@@ -56,17 +56,41 @@ const seedDatabase = async () => {
       console.log("✔ Admin already exists");
     }
 
-    // ---------- TEACHER ----------
-    const teacherExists = await Teacher.findOne({
+    // ==========================
+    // CLASS
+    // ==========================
+
+    let sclass = await Sclass.findOne({
+      sclassName: "Grade 10",
+      school: admin._id,
+    });
+
+    if (!sclass) {
+      sclass = await Sclass.create({
+        sclassName: "Grade 10",
+        school: admin._id,
+      });
+
+      console.log("✅ Class created");
+    } else {
+      console.log("✔ Class already exists");
+    }
+
+    // ==========================
+    // TEACHER
+    // ==========================
+
+    let teacher = await Teacher.findOne({
       email: "teacher@school.com",
     });
 
-    if (!teacherExists) {
-      await Teacher.create({
+    if (!teacher) {
+      teacher = await Teacher.create({
         name: "Demo Teacher",
         email: "teacher@school.com",
         password: await bcrypt.hash("Teacher@123", 10),
-        role: "teacher",
+        school: admin._id,
+        teachSclass: sclass._id,
       });
 
       console.log("✅ Teacher created");
@@ -74,17 +98,22 @@ const seedDatabase = async () => {
       console.log("✔ Teacher already exists");
     }
 
-    // ---------- STUDENT ----------
-    const studentExists = await Student.findOne({
-      email: "student@school.com",
+    // ==========================
+    // STUDENT
+    // ==========================
+
+    let student = await Student.findOne({
+      rollNum: 1,
+      school: admin._id,
     });
 
-    if (!studentExists) {
-      await Student.create({
+    if (!student) {
+      student = await Student.create({
         name: "Demo Student",
-        email: "student@school.com",
+        rollNum: 1,
         password: await bcrypt.hash("Student@123", 10),
-        role: "student",
+        school: admin._id,
+        sclassName: sclass._id,
       });
 
       console.log("✅ Student created");
@@ -92,13 +121,12 @@ const seedDatabase = async () => {
       console.log("✔ Student already exists");
     }
 
-    console.log("\n Database seeded successfully🤲");
+    console.log("\n🎉 Database seeded successfully.");
 
     process.exit(0);
   } catch (err) {
-    console.error("❌ Seed failed");
+    console.error("\n❌ Seed failed");
     console.error(err);
-
     process.exit(1);
   }
 };

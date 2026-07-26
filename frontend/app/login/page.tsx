@@ -220,7 +220,7 @@ export default function LoginPage() {
         {selectedRole === UserRole.ADMIN && (
           <div className="flex justify-center items-center p-2 mt-2 gap-2">
             Don&apos;t have an account?{" "}
-            <Link className="text-blue-600 underline" href="/adminRegister">
+            <Link className="text-blue-600 underline" href="/adminRegister" onClick={()=> console.log("clicked")}>
               Sign Up
             </Link>
           </div>

@@ -2,7 +2,7 @@
 
 This document tracks implementation progress for connecting the Next.js frontend to the Express/MongoDB backend.
 
-**Last updated:** Phase 2 & Phase 3 complete
+**Last updated:** Phases 4 & 5 complete — full stack ready
 
 ---
 
@@ -14,9 +14,9 @@ This document tracks implementation progress for connecting the Next.js frontend
 | 1 | Unified auth (Context API) | ✅ Complete |
 | 2 | Types & API service layer | ✅ Complete |
 | 3 | Admin portal integration | ✅ Complete |
-| 4 | Teacher portal integration | ⏳ Pending |
-| 5 | Student portal integration | ⏳ Pending |
-| 6 | Polish & production readiness | ⏳ Pending |
+| 4 | Teacher portal integration | ✅ Complete |
+| 5 | Student portal integration | ✅ Complete |
+| 6 | Security & auth for all roles | ✅ Complete |
 
 **State management decision:** Context API (`UserProvider` / `useAuth`) for auth. Redux Toolkit reserved for future global state if needed (not used yet).
 
@@ -168,6 +168,60 @@ See `NEXTJS_LEARNING_NOTES.md` for beginner explanations.
 
 ---
 
+## Phase 4 — Teacher Portal ✅
+
+### Backend
+- Teacher login now issues **httpOnly JWT cookie** (same as admin)
+- `portalGuards.js` — teachers can only access **their own class/students**
+- Routes opened: `Sclass/Students`, `StudentAttendance`, `NoticeList`
+
+### Frontend (`app/services/portal/teacher.portal.ts`)
+| Page | Feature |
+|------|---------|
+| `/teacher` | Live student count, class/subject info |
+| `/teacher/my-class` | Student list from API |
+| `/teacher/attendance` | Mark Present/Absent → saves to DB |
+| `/teacher/profile` | Teacher details |
+
+**Why portal services folder?** Keeps teacher/student API calls separate from admin CRUD — easier to maintain and review permissions.
+
+---
+
+## Phase 5 — Student Portal ✅
+
+### Backend
+- Student login issues JWT cookie
+- `GET /Student/:id` — students can only read **own** record
+- `GET /MyComplaints` — student's own complaints
+- `POST /ComplainCreate` — auto-sets user/school (prevents spoofing)
+- `GET /NoticeList/:schoolId` — read school notices
+
+### Frontend (`app/services/portal/student.portal.ts`)
+| Page | Feature |
+|------|---------|
+| `/student` | Attendance %, marks avg, notices |
+| `/student/attendance` | Attendance history from DB |
+| `/student/results` | Exam results from DB |
+| `/student/notices` | School notices |
+| `/student/complaints` | Submit & view own complaints |
+| `/student/profile` | Student details |
+
+---
+
+## Phase 6 — Security ✅
+
+| Practice | Implementation |
+|----------|----------------|
+| Token storage | httpOnly cookies only (not accessible to JS / XSS) |
+| Role checks | `authorizeRoles()` + `portalGuards.js` ownership checks |
+| Student complaints | Server forces `user` = logged-in student id |
+| Middleware | `/admin`, `/teacher`, `/student` require cookie |
+| Auth hydrate | All roles use `GET /Me` on app load |
+
+**Why cookies over localStorage?** httpOnly cookies can't be stolen by malicious scripts — industry standard for session tokens.
+
+---
+
 ## Quick test checklist
 
 ### Auth (Phase 1)
@@ -182,6 +236,17 @@ See `NEXTJS_LEARNING_NOTES.md` for beginner explanations.
 - [ ] Create teacher assigned to class + subject
 - [ ] Create notice → shows on dashboard
 - [ ] Delete items works
+
+### Teacher (Phase 4)
+- [ ] Login as teacher → see dashboard
+- [ ] View class students
+- [ ] Mark attendance → student sees it
+
+### Student (Phase 5)
+- [ ] Login with roll no + name + password
+- [ ] View attendance & results
+- [ ] Read notices
+- [ ] Submit complaint → admin sees it
 
 ---
 

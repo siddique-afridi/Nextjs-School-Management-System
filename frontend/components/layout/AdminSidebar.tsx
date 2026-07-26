@@ -32,17 +32,10 @@ export function AdminSidebar({ isOpen = true, onClose }: AdminSidebarProps) {
 
   return (
     <>
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
-          onClick={onClose}
-        />
-      )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-sidebar transition-transform duration-300 md:relative md:translate-x-0 ${
+        className={`fixed z-20 w-64 border-r border-border bg-sidebar transition-transform duration-300 md:relative md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

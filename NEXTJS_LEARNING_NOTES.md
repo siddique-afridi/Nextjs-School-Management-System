@@ -98,3 +98,20 @@ npm run dev
 ```
 
 Open http://localhost:3000
+
+---
+
+## Phase 4–5 — Teacher & Student portals
+
+### JWT cookie for all roles
+All logins (admin, teacher, student) now set the same httpOnly cookie.
+**Why?** One auth pattern; teacher/student can call protected APIs securely.
+
+### `portalGuards.js` on backend
+Teachers only access their class. Students only access their own data.
+**Why not share admin routes?** Principle of least privilege — safer.
+
+### `app/services/portal/` folder
+Role-specific API calls live here, separate from admin CRUD services.
+**Why?** Easier to find and audit permission-related code.
+

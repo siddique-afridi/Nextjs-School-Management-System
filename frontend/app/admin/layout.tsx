@@ -32,17 +32,21 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <AppNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-      <div className="flex flex-1 overflow-hidden">
-        <AdminSidebar
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-        />
-        <main className="flex-1 overflow-auto">
-          <div className="p-4 md:p-6">{children}</div>
-        </main>
+    <div className="flex h-screen flex-col overflow-hidden">
+  <AppNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+
+  <div className="flex flex-1 overflow-hidden">
+    <AdminSidebar
+      isOpen={sidebarOpen}
+      onClose={() => setSidebarOpen(false)}
+    />
+
+    <main className="flex-1 overflow-y-auto">
+      <div className="p-4 md:p-6">
+        {children}
       </div>
-    </div>
+    </main>
+  </div>
+</div>
   );
 }

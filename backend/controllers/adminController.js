@@ -51,13 +51,13 @@ const adminLogIn = async (req, res) => {
     const admin = await Admin.findOne({ email: email.trim().toLowerCase() });
 
     if (!admin) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email or Password" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, admin.password);
 
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
     const token = generateToken(admin._id, "Admin");
