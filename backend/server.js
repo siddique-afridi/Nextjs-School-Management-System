@@ -23,6 +23,7 @@ console.log("Environment:", process.env.NODE_ENV);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const isProduction = process.env.NODE_ENV === "production";
+
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
