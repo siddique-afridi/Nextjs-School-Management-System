@@ -1,5 +1,5 @@
 import Admin from "../models/Admin.js";
-import Teacher from "../models/teacher.js";
+import Teacher from "../models/Teacher.js";
 import Student from "../models/Students.js";
 
 const me = async (req, res) => {
