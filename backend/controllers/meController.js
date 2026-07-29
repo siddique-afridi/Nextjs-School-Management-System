@@ -5,7 +5,6 @@ import Student from "../models/Students.js";
 const me = async (req, res) => {
   try {
     const { id, role } = req.user;
-
     if (role === "Admin") {
       const admin = await Admin.findById(id).select("-password");
       if (!admin) return res.status(404).json({ message: "User not found" });
@@ -38,5 +37,6 @@ const me = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 export default me;
