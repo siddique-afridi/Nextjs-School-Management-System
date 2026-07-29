@@ -26,7 +26,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://nextjs-school-management-system-um9.vercel.app/api",
+  "https://nextjs-school-management-system-um9.vercel.app",
   "http://localhost:5173",
   "https://lixschool.vercel.app",
   "https://www.lixschool.vercel.app",
