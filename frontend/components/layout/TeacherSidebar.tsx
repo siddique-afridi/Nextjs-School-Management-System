@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Clock, User, X } from "lucide-react";
+import { LayoutDashboard, Users, Clock, User, X, MessageCircle } from "lucide-react";
 
 interface TeacherSidebarProps {
   isOpen?: boolean;
@@ -14,6 +14,7 @@ const navItems = [
   { href: "/teacher/my-class", label: "My Class", icon: Users },
   { href: "/teacher/attendance", label: "Attendance", icon: Clock },
   { href: "/teacher/profile", label: "Profile", icon: User },
+  { href: "/teacher/conversation", label: "Messaging", icon: MessageCircle },
 ];
 
 export function TeacherSidebar({ isOpen = true, onClose }: TeacherSidebarProps) {

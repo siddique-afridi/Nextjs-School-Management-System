@@ -1,6 +1,8 @@
 import Conversation from "../models/Conversation.js";
 import Student from "../models/Students.js";
+import Teacher from "../models/Teacher.js";
 import Sclass from "../models/Class.js";
+
 
 export const createClassConversation = async (req, res) => {
   try {
@@ -58,19 +60,27 @@ export const createClassConversation = async (req, res) => {
 
 export const getMyClassConversation = async (req, res) => {
   try {
-    const studentId = req.user.id;
+    const userId = req.user.id;
 
-    const student = await Student.findById(studentId).select("sclassName");
+    // Search both collections in parallel
+    const [student, teacher] = await Promise.all([
+      Student.findById(userId).select("sclassName"),
+      Teacher.findById(userId).select("teachSclass"),
+    ]);
 
-    if (!student) {
+    // Extract sclassName from whichever record exists
+    const classId = student?.sclassName || teacher?.teachSclass;
+
+
+    if (!classId) {
       return res.status(404).json({
-        message: "Student not found",
+        message: "User or class assignment not found",
       });
     }
 
     const conversation = await Conversation.findOne({
       type: "CLASS",
-      classId: student.sclassName,
+      classId: classId,
     }).populate("classId");
 
     if (!conversation) {

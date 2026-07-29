@@ -11,8 +11,15 @@ const messageSchema = new mongoose.Schema(
 
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "student",
+      rrefPath: "senderModel", // 👈 Dynamic reference base
       required: true,
+    },
+
+    // 💡 Added senderModel field
+    senderModel: {
+      type: String,
+      required: true,
+      enum: ["student", "teacher"], // 👈 Must match your exact Mongoose model names
     },
 
     content: {

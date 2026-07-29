@@ -18,7 +18,8 @@ const chatSocket = (io) => {
           });
         }
 
-        const senderId = socket.user.id;
+        // 1. Get the authenticated user from the socket
+        const currentUser = socket.user;
 
         if (!conversationId || !content?.trim()) {
           return socket.emit("message_error", {
@@ -26,13 +27,26 @@ const chatSocket = (io) => {
           });
         }
 
+        // 2. Safely extract ID (handles both .id and ._id depending on your auth middleware)
+        const senderId = currentUser._id || currentUser.id;
+
+        // 3. Create the message using currentUser
         const message = await Message.create({
           conversationId,
           senderId,
+          senderModel: currentUser.role === "teacher" ? "teacher" : "student",
           content: content.trim(),
         });
+        console.log("chatsocket message", message);
 
-        const populatedMessage = await message.populate("senderId", "name");
+        // Explicitly pass the path and model to populate
+        const populatedMessage = await message.populate({
+          path: "senderId",
+          model: currentUser.role === "teacher" ? "teacher" : "student", // Ensure model names match your Mongoose model definitions
+          select: "name",
+        });
+
+        console.log("populated message", populatedMessage);
 
         io.to(conversationId).emit("new_message", populatedMessage);
       } catch (error) {
